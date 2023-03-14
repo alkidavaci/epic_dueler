@@ -1,40 +1,46 @@
 import { useState, useEffect } from 'react';
-// Import the jwt_decode library
-import jwt_decode from 'jwt-decode'; 
+import AuthService from './AuthService';
+
+import Home from './pages/Home';
+import Nav from './Nav';
 
 function Header() {
-    // Set isLoggedIn to true or false based on whether the user is logged in
-  const [isLoggedIn, setIsLoggedIn] = useState(false); 
+  // Set isLoggedIn to true or false based on whether the user is logged in
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   // Set the username to the user's username if they are logged in
-  const [username, setUsername] = useState(''); 
+  const [username, setUsername] = useState('');
 
   useEffect(() => {
-    // Get the token from local storage (or wherever it's stored)
-    const token = localStorage.getItem('token'); 
-    if (token) {
-      const decoded = jwt_decode(token); // Decode the token to get the user's information
+    // Check if the user is logged in
+    if (AuthService.loggedIn()) {
+      // Get the user's username from the decoded token
+      const profile = AuthService.getProfile();
+      setUsername(profile.username);
       setIsLoggedIn(true);
-      setUsername(decoded.username); // Set the username to the user's username from the token
     }
   }, []);
 
   const handleLogout = () => {
     // Code to handle logging out the user goes here
+    AuthService.logout();
     setIsLoggedIn(false);
     setUsername('');
   };
 
   return (
     <div className="header">
-      {isLoggedIn && (
-        <div className="username">
-          Logged in as {username}
-        </div>
-      )}
       {isLoggedIn ? (
-        <button onClick={handleLogout}>Logout</button>
+        <div>
+          <div className="username">
+            Logged in as {username}
+          </div>
+          <button onClick={handleLogout}>Logout</button>
+          <div>
+            <Nav />
+          </div>
+        </div>
       ) : (
-        <button>Login</button>
+        <Home />
       )}
     </div>
   );
