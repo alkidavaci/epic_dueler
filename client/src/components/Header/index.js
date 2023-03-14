@@ -39,7 +39,6 @@ function Header() {
             <Nav />
           </div>
         </div>
-
       ) : (
         <Home />
       )}
