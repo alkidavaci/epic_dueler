@@ -187,8 +187,8 @@ class Character {
 
 // Creates two unique characters using the "character" constructor
 // name, strength, hitpoints, atk, crit, def, parry
-const grace = new Character('Grace', 6, 60, 0, 0, 0, 0);
-const dijkstra = new Character('Dijks', 12, 60, 0, 0, 0, 0);
+const grace = new Character('Grace', 10, 72, 3, 2, 3, 3);
+const dijkstra = new Character('Dijks', 10, 60, 0, 9, 3, 0);
 var graceTurn = true;
 
 
@@ -238,4 +238,4 @@ const turnInterval = setInterval(() => {
 
   // Switch turns
   graceTurn = !graceTurn;
-}, 1000);
+}, 100);

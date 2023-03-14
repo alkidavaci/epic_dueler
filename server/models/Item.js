@@ -17,7 +17,7 @@ const itemSchema = new Schema({
             required: true
         }
     }],
-    itemType: {
+    itemtype: {
         type: String,
         required: true
     },
@@ -27,7 +27,7 @@ const itemSchema = new Schema({
         trim: true
     },
     value: {
-        type: Number,
+        type: String,
         required: true
     },
     description: {
