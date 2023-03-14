@@ -36,7 +36,7 @@ accountSchema.pre('save', async function (next) {
     next();
 });
 
-accountSchema.methods.isCorrectPassword = async function (pasword) {
+accountSchema.methods.isCorrectPassword = async function (password) {
     return bcrypt.compare(password, this.password);
 }
 
