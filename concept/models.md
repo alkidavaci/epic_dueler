@@ -11,24 +11,24 @@ Character
     Wins:
     Inventory: Id
     StatBlock: Id
-    isFighting:
+    npc:
 
 Inventory
-    Weapon:
-    Armor:
-    slot1:
-    slot2:
-    ...
-    slot9:
+    Weapon: id
+    Armor: id
+    slot1: id
+    slot2: id
+    slot3: id
+    slot4: id
+    bag: [id]
 
 StatBlock
-    MaxHp:
-    weaponRange:
-    Attack:
-    AttacksPerRound:
-    Defense:
-    Crit:
-    Parry:
+    MaxHp:          H
+    weaponRange:    
+    Attack:         A
+    Def:            D
+    Crit:           C
+    Parry:          P
 
 
 
@@ -37,5 +37,5 @@ Item
     Icon:
     Itemtype:
     Price:
-    Value:
+    Value: c.1,p.1
     Description:

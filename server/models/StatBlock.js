@@ -1,35 +1,38 @@
 const { Schema, model } = require('mongoose');
 
 const statSchema = new Schema({
-    maxHp: {
-        type: Number
-    },
-    weaponRange: {
+    hp: {
         type: Number,
-        min: [0, 'Weapon is too weak'],
-        max: [100, 'Weapon is too strong'],
-        required: true
+        required: true,
+        default: 60
+    },
+    range: {
+        type: Number,
+        min: [1, 'Weapon is too weak'],
+        max: [20, 'Weapon is too strong'],
+        required: true,
+        default: 4
     },
     attack: {
         type: Number,
         required: true,
-        min: 0
-    },
-    attacksPerRound: {
-        type: Number,
-        required: true
+        min: 0,
+        default: 0
     },
     defense: {
         type: Number,
-        required: true
+        required: true,
+        default: 0
     },
     crit: {
         type: Number,
-        required: true
+        required: true,
+        default: 0
     },
     parry: {
         type: Boolean,
-        required: true
+        required: true,
+        default: 0
     }
 });
 

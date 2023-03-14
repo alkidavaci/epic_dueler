@@ -1,4 +1,4 @@
-const { Schema, model } = require('mongose');
+const { Schema, model } = require('mongoose');
 
 const characterSchema = new Schema({
     name: {
@@ -8,31 +8,35 @@ const characterSchema = new Schema({
         maxLength: 20,
         trim: true
     },
-    currentHp: {
-        type: Number,
-        required: true
-    },
     gold: {
         type: Number,
-        required: true
+        required: true,
+        default: 300
     },
     wins: {
         type: Number,
-        required: true
+        required: true,
+        default: 0
     },
-    inventory: [{
+    deaths: {
+        type: Number,
+        required: true,
+        default: 0
+    },
+    inventory: {
         type: Schema.Types.ObjectId,
         ref: 'Inventory',
         required: true
-    }],
-    statblock: [{
+    },
+    statblock: {
         type: Schema.Types.ObjectId,
         ref: 'StatBlock',
         required: true
-    }],
+    },
     isfighting: {
         type: Boolean,
-        required: true
+        required: true,
+        default: false
     }
 });
 

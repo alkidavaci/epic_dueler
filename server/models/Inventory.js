@@ -2,33 +2,33 @@ const { Schema, model } = require('mongoose');
 
 const invSchema = new Schema({
     weapon: {
-        type: String,
-        required: [true, 'You cannot fight without a weapon!']
+        type: Schema.Types.ObjectId,
+        ref: 'Item'
     },
     armor: {
-        type: String,
-        required: true
+        type: Schema.Types.ObjectId,
+        ref: 'Item'
     },
     slot1: {
-        type: String,
-        required: true
+        type: Schema.Types.ObjectId,
+        ref: 'Item'
     },
     slot2: {
-        type: String,
-        required: true
+        type: Schema.Types.ObjectId,
+        ref: 'Item'
     },
     slot3: {
-        type: String,
-        required: true
+        type: Schema.Types.ObjectId,
+        ref: 'Item'
     },
     slot4: {
-        type: String,
-        required: true
+        type: Schema.Types.ObjectId,
+        ref: 'Item'
     },
-    slot5: {
-        type: String,
-        required: true
-    }
+    bag: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Item'
+    }]
 });
 
 
