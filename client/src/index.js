@@ -5,7 +5,6 @@ import App from './App';
 
 import 'bulma/css/bulma.min.css';
 
-
 ReactDOM.render(
   <React.StrictMode>
     <App />

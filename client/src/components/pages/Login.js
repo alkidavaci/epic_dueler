@@ -47,7 +47,6 @@ const Login = (props) => {
         <div className="columns is-centered">
           {data ? (
             <Inventory />
-            
           ) : (
             <form onSubmit={handleFormSubmit}>
               <div className="column is-6">
