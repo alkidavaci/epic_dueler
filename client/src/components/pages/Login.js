@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useMutation } from "@apollo/client";
-import { LOGIN_USER } from "../utils/mutations";
+import { LOGIN_USER } from "../../utils/gql/mutations";
 
-import Auth from "../utils/auth";
+import Auth from "../../utils/Auth";
 
 import Inventory from '../pages/Inventory';
 

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import Auth from '../../utils/Auth';
+import Home from '../pages/Home'
 
 function Header() {
   // Set isLoggedIn to true or false based on whether the user is logged in
