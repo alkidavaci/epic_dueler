@@ -1,10 +1,6 @@
 import { useState, useEffect } from 'react';
 import AuthService from './AuthService';
 
-// Import Bulma as css Framework
-import { Navbar } from 'react-bulma-components';
-import 'react-bulma-components/dist/react-bulma-components.min.css';
-
 function Header() {
   // Set isLoggedIn to true or false based on whether the user is logged in
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -30,24 +26,23 @@ function Header() {
 
   return (
     <div className="header">
-      <Navbar color="primary">
+    <nav className="navbar is-primary" role="navigation" aria-label="main navigation">
+      <div className="navbar-menu">
         {isLoggedIn ? (
-          <Navbar.Menu>
-            <Navbar.Container position="end">
-              <Navbar.Item>
-                Hi, {username}
-              </Navbar.Item>
-              <Navbar.Item onClick={handleLogout}>
-                Logout
-              </Navbar.Item>
-              <Nav />
-            </Navbar.Container>
-          </Navbar.Menu>
+          <div className="navbar-end">
+            <div className="navbar-item">
+              Hi, {username}
+            </div>
+            <div className="navbar-item" onClick={handleLogout}>
+              Logout
+            </div>
+          </div>
         ) : (
           <Home />
         )}
-      </Navbar>
-    </div>
+      </div>
+    </nav>
+  </div>
   );
 }
 
