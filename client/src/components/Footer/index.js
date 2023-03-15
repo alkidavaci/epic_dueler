@@ -1,18 +1,14 @@
-// Import Bulma as css Framework
-import { Footer as BulmaFooter, Content, Container } from 'react-bulma-components';
-
 const Footer = () => {
   return (
-    <BulmaFooter>
-      <Container>
-        <Content style={{ textAlign: 'center' }}>
+    <footer className="footer">
+      <div className="container">
+        <div className="content has-text-centered">
           <p>
             © 2023
           </p>
-        </Content>
-      </Container>
-    </BulmaFooter>
+        </div>
+      </div>
+    </footer>
   );
 };
-
 export default Footer;

@@ -6,6 +6,7 @@ import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 // Import component
 import Battle from './components/pages/Battle';
 import Footer from './components/Footer';
+import Header from './components/Header'
 import Home from './components/pages/Home';
 import Inventory from './components/pages/Inventory';
 import Fight from './components/pages/Fight';
