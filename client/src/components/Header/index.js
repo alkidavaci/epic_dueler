@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import Auth from '../../utils/Auth';
-import Home from '../pages/Home'
 
 function Header() {
   // Set isLoggedIn to true or false based on whether the user is logged in
@@ -26,24 +25,24 @@ function Header() {
   };
 
   return (
-    <div className="header">
-    <nav className="navbar is-primary" role="navigation" aria-label="main navigation">
-      <div className="navbar-menu">
-        {isLoggedIn ? (
-          <div className="navbar-end">
-            <div className="navbar-item">
-              Hi, {username}
-            </div>
-            <div className="navbar-item" onClick={handleLogout}>
-              Logout
-            </div>
+<div className="header">
+  <nav className="navbar is-primary" role="navigation" aria-label="main navigation">
+    <div className="navbar-menu">
+      <h1 className="title">Epic Dueler</h1>
+      {isLoggedIn && (
+        <div className="navbar-end">
+          <div className="navbar-item">
+            Hi, {username}
           </div>
-        ) : (
-          <Home />
-        )}
-      </div>
-    </nav>
-  </div>
+          <div className="navbar-item" onClick={handleLogout}>
+            Logout
+          </div>
+        </div>
+      )}
+    </div>
+  </nav>
+</div>
+
   );
 }
 
