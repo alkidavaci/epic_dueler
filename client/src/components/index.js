@@ -1,0 +1,10 @@
+export { default as Battle } from './pages/Battle';
+export { default as Footer } from './Footer';
+export { default as Header } from './Header';
+export { default as Home } from './pages/Home';
+export { default as Inventory } from './pages/Inventory';
+export { default as Fight } from './pages/Fight';
+export { default as Login } from './pages/Login';
+export { default as NotFound } from './NotFound';
+export { default as Shop } from './pages/Shop';
+export { default as Signup } from './pages/Signup';
