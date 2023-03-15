@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import { useMutation } from "@apollo/client";
 import { LOGIN_USER } from "../utils/mutations";
 
 import Auth from "../utils/auth";
-import { Field, Label, Control, Input, Button, Columns, Notification,} from "react-bulma-components";
+
+import Inventory from '../pages/Inventory';
 
 const Login = (props) => {
   const [formState, setFormState] = useState({ username: "", password: "" });
@@ -42,59 +42,65 @@ const Login = (props) => {
   };
 
   return (
-    <Section>
-      <Container>
-        <Columns className="is-centered">
+    <section className="section">
+      <div className="container">
+        <div className="columns is-centered">
           {data ? (
             <Inventory />
+            
           ) : (
-            <Columns.Column size={6}>
-              <Field>
-                <Label>Username</Label>
-                <Control>
-                  <Input
-                    type="username"
-                    placeholder="Your Username"
-                    name="username"
-                    value={formState.username}
-                    onChange={handleChange}
-                  />
-                </Control>
-              </Field>
-              <Field>
-                <Label>Password</Label>
-                <Control>
-                  <Input
-                    type="password"
-                    placeholder="******"
-                    name="password"
-                    value={formState.password}
-                    onChange={handleChange}
-                  />
-                </Control>
-              </Field>
-              <Field>
-                <Control>
-                  <Button
-                    color="info"
-                    style={{ cursor: "pointer" }}
-                    type="submit"
-                    fullwidth
-                  >
-                    Submit
-                  </Button>
-                </Control>
-              </Field>
-            </Columns.Column>
+            <form onSubmit={handleFormSubmit}>
+              <div className="column is-6">
+                <div className="field">
+                  <label className="label">Email</label>
+                  <div className="control">
+                    <input
+                      className="input"
+                      type="email"
+                      placeholder="Your Email"
+                      name="email"
+                      value={formState.email}
+                      onChange={handleChange}
+                    />
+                  </div>
+                </div>
+                <div className="field">
+                  <label className="label">Password</label>
+                  <div className="control">
+                    <input
+                      className="input"
+                      type="password"
+                      placeholder="******"
+                      name="password"
+                      value={formState.password}
+                      onChange={handleChange}
+                    />
+                  </div>
+                </div>
+                <div className="field">
+                  <div className="control">
+                    <button
+                      className="button is-info"
+                      style={{ cursor: "pointer" }}
+                      type="submit"
+                      fullwidth
+                    >
+                      Submit
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </form>
+
           )}
           {error && (
-            <Notification color="danger">
+            <div className="notification is-danger">
               <p className="my-3">{error.message}</p>
-            </Notification>
+            </div>
           )}
-        </Columns>
-      </Container>
-    </Section>
+        </div>
+      </div>
+    </section>
   );
 };
 
