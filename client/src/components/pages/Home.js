@@ -1,31 +1,28 @@
 import { Link } from 'react-router-dom';
 
-// Import Bulma as css Framework
-import { Box, Button, Columns, Container, Section, Title } from 'react-bulma-components';
-
-function Home() {
+const Home = () => {
   return (
-    <Section>
-      <Container>
-        <Columns className="is-centered">
-          <Columns.Column size={6}>
-            <Box>
-              <Title className="has-text-centered">Welcome to Epic Dueler</Title>
-              <Button.Group className="is-centered">
-                <Link to="/login">
-                  <Button color="primary">Login</Button>
+    <section className="section">
+      <div className="container">
+        <div className="columns is-centered">
+          <div className="column is-6">
+            <div className="box">
+              <h1 className="title has-text-centered">Welcome to Epic Dueler</h1>
+              <div className="buttons is-centered">
+                <Link to="/login" className="button is-primary">
+                  Login
                 </Link>
-                <Link to="/signup">
-                  <Button color="info">New Character</Button>
+                <Link to="/signup" className="button is-info">
+                  New Character
                 </Link>
-              </Button.Group>
-            </Box>
-          </Columns.Column>
-        </Columns>
-      </Container>
-    </Section>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
   );
-}
+};
 
 export default Home;
 

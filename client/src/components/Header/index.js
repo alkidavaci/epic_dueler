@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import AuthService from './AuthService';
+import Auth from '../../utils/Auth';
 
 function Header() {
   // Set isLoggedIn to true or false based on whether the user is logged in
@@ -9,9 +9,9 @@ function Header() {
 
   useEffect(() => {
     // Check if the user is logged in
-    if (AuthService.loggedIn()) {
+    if (Auth.loggedIn()) {
       // Get the user's username from the decoded token
-      const profile = AuthService.getProfile();
+      const profile = Auth.getProfile();
       setUsername(profile.username);
       setIsLoggedIn(true);
     }
@@ -19,30 +19,30 @@ function Header() {
 
   const handleLogout = () => {
     // Code to handle logging out the user goes here
-    AuthService.logout();
+    Auth.logout();
     setIsLoggedIn(false);
     setUsername('');
   };
 
   return (
-    <div className="header">
-    <nav className="navbar is-primary" role="navigation" aria-label="main navigation">
-      <div className="navbar-menu">
-        {isLoggedIn ? (
-          <div className="navbar-end">
-            <div className="navbar-item">
-              Hi, {username}
-            </div>
-            <div className="navbar-item" onClick={handleLogout}>
-              Logout
-            </div>
+<div className="header">
+  <nav className="navbar is-primary" role="navigation" aria-label="main navigation">
+    <div className="navbar-menu">
+      <h1 className="title">Epic Dueler</h1>
+      {isLoggedIn && (
+        <div className="navbar-end">
+          <div className="navbar-item">
+            Hi, {username}
           </div>
-        ) : (
-          <Home />
-        )}
-      </div>
-    </nav>
-  </div>
+          <div className="navbar-item" onClick={handleLogout}>
+            Logout
+          </div>
+        </div>
+      )}
+    </div>
+  </nav>
+</div>
+
   );
 }
 

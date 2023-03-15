@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { useMutation } from "@apollo/client";
-import { LOGIN_USER } from "../utils/mutations";
+import { LOGIN_USER } from "../../utils/gql/mutations";
 
-import Auth from "../utils/auth";
+import Auth from "../../utils/Auth";
 
 import Inventory from '../pages/Inventory';
+import { Link } from "react-router-dom";
 
 const Login = (props) => {
   const [formState, setFormState] = useState({ username: "", password: "" });
@@ -49,7 +50,7 @@ const Login = (props) => {
             <Inventory />
           ) : (
             <form onSubmit={handleFormSubmit}>
-              <div className="column is-6">
+              <div className="column is-12">
                 <div className="field">
                   <label className="label">Email</label>
                   <div className="control">
@@ -82,12 +83,14 @@ const Login = (props) => {
                       className="button is-info"
                       style={{ cursor: "pointer" }}
                       type="submit"
-                      fullwidth
                     >
                       Submit
                     </button>
                   </div>
                 </div>
+                <div><Link to="/signup" >
+                 Create A New Character
+                </Link></div>
               </div>
             </form>
 
