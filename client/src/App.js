@@ -4,16 +4,7 @@ import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 
 // Import component
-import Battle from './components/pages/Battle';
-import Footer from './components/Footer';
-import Header from './components/Header'
-import Home from './components/pages/Home';
-import Inventory from './components/pages/Inventory';
-import Fight from './components/pages/Fight';
-import Login from './components/pages/Login';
-import NotFound from './components/NotFound';
-import Shop from './components/pages/Shop';
-import Signup from './components/pages/Signup';
+import { Battle, Footer, Header, Home, Inventory, Fight, Login, NotFound, Shop, Signup } from './index';
 
 // Creates a new instance of the ApolloClient 
 const client = new ApolloClient({
