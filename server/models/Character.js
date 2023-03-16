@@ -34,10 +34,10 @@ const characterSchema = new Schema({
         ref: 'StatBlock',
         required: true
     },
-    isfighting: {
-        type: Boolean,
+    rating: {
+        type: Number,
         required: true,
-        default: false
+        default: 0
     }
 });
 

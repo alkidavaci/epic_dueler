@@ -3,6 +3,7 @@ const { gql } = require("graphql-tag");
 const typeDefs = gql`
   type Account {
     _id: ID!
+    username: String!
     email: String!
     password: String!
     character: Character
@@ -17,7 +18,7 @@ const typeDefs = gql`
     deaths: Int!
     inventory: Inventory!
     statblock: StatBlock!
-    isfighting: Boolean!
+    rating: Int!
 
   }
 
@@ -55,7 +56,7 @@ const typeDefs = gql`
 
   type Auth {
     token: ID!
-    user: Account
+    account: Account
   }
 
   type Query {
@@ -67,8 +68,8 @@ const typeDefs = gql`
 
   type Mutation {
     login(email: String!, password: String!): Auth
-    addAccount(email: String!, password: String!): Auth
-    addCharacter(email: String!, name: String!): Character
+    addAccount(username: String!, email: String!, password: String!): Auth
+    addCharacter(username: String!, name: String!): Character
     updateCharacter(name: String!, win: Boolean!, gain: Int!): Character
     updateInventory(characterId: ID!, inventoryId: ID!, itemId: ID!, action: String!, slot: String): Inventory
     removeCharacter(characterId: ID!): Character
@@ -78,6 +79,4 @@ const typeDefs = gql`
   }
 `;
 
-//queries:
-// me
 module.exports = typeDefs;

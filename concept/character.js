@@ -191,10 +191,7 @@ const grace = new Character('Grace', 10, 72, 3, 2, 3, 3); //15
 const dijkstra = new Character('Dijks', 4, 60, 0, 0, 0, 0); //16
 var graceTurn = true;
 
-var work = "c";
-if (work) {
-console.log(work);
-}
+
 
 // ROLL INITIATIVE randomly determines who goes next
 // rollInit() determines who attacks first and is triggered by a parry event
