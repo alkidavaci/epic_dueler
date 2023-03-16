@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { ADD_ACCOUNT } from '../../utils/gql/mutations';
+import { ADD_ACCOUNT } from '../utils/gql/mutations';
 
 import { useMutation } from '@apollo/client';
 
 import Inventory from '../pages/Inventory';
-import Auth from '../../utils/Auth';
+import Auth from '../utils/Auth';
 
 const Signup = () => {
     const [formState, setFormState] = useState({

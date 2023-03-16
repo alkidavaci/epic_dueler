@@ -42,8 +42,8 @@ const resolvers = {
 
     Mutation: {
 
-        login: async (parent, { email, password }) => {
-            const account = await Account.findOne({ email });
+        login: async (parent, { username, password }) => {
+            const account = await Account.findOne({ username });
             if (!account) {
                 throw new AuthenticationError("Username or Password does not match!");
             };
