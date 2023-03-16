@@ -4,8 +4,8 @@ import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 
 // Import component
-import { Battle, Footer, Header, Home, Inventory, Fight, Login, NotFound, Shop, Signup } from './components';
-
+import {  Footer, Header, NotFound } from './components';
+import { Home, Battle, Inventory, Fight, Login, Shop, Signup } from './pages'
 // Creates a new instance of the ApolloClient 
 const client = new ApolloClient({
     uri: '/graphql',
