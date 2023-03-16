@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ADD_PROFILE } from '../../utils/gql/mutations';
+import { ADD_ACCOUNT } from '../../utils/gql/mutations';
 
 import { useMutation } from '@apollo/client';
 
@@ -8,18 +8,18 @@ import Auth from '../../utils/Auth';
 
 const Signup = () => {
     const [formState, setFormState] = useState({
-        name: '',
+        username: '',
         email: '',
         password: '',
     });
-    const [addProfile, { error, data }] = useMutation(ADD_PROFILE);
+    const [addProfile, { error, data }] = useMutation(ADD_ACCOUNT);
 
     const handleChange = (event) => {
-        const { name, value } = event.target;
+        const { username, value } = event.target;
 
         setFormState({
             ...formState,
-            [name]: value,
+            [username]: value,
         });
     };
 

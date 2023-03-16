@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useMutation } from "@apollo/client";
-import { LOGIN_USER } from "../../utils/gql/mutations";
+import { LOGIN } from "../../utils/gql/mutations";
 
 import Auth from "../../utils/Auth";
 
@@ -9,7 +9,7 @@ import { Link } from "react-router-dom";
 
 const Login = (props) => {
   const [formState, setFormState] = useState({ username: "", password: "" });
-  const [login, { error, data }] = useMutation(LOGIN_USER);
+  const [login, { error, data }] = useMutation(LOGIN);
 
   // Update state based on form input changes
   const handleChange = (event) => {

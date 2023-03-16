@@ -8,7 +8,7 @@ class Character {
     this.def = def;
     this.parry = parry;
   }
-  //items 1 statUnit = +12hp, +1 stat, +2 range , .67 def per weaponrange
+  //items 1 statUnit = +12hp, +1 stat, +2 range 
   // 🛡️ ⚔️ 🩸 🎲
   printStats() {
     console.log(`❤️ (${this.hitpoints})  -(${this.name})-`);
@@ -27,7 +27,7 @@ class Character {
 
   attack(target) {
     const hit = Math.floor(Math.random() * 20) + 1;
-    const defense = Math.floor(Math.random() * 20) + 1;
+    const defense = (Math.floor(Math.random() * 20) + 1);
     console.log(`${this.name} attacks! (${hit})vs(${defense})`)
 
     if (hit > defense + target.parry || (hit >= 20 - this.crit && defense != hit)) {
@@ -186,10 +186,11 @@ class Character {
 }
 
 // Creates two unique characters using the "character" constructor
-// name, strength, hitpoints, atk, crit, def, parry
-const grace = new Character('Grace', 10, 72, 3, 2, 3, 3);
-const dijkstra = new Character('Dijks', 10, 60, 0, 9, 3, 0);
+// name, strength, hitpoints, atk, crit, def, parry   4, 60, 0, 0,0,0
+const grace = new Character('Grace', 10, 72, 3, 2, 3, 3); //15
+const dijkstra = new Character('Dijks', 4, 60, 0, 0, 0, 0); //16
 var graceTurn = true;
+
 
 
 // ROLL INITIATIVE randomly determines who goes next

@@ -39,3 +39,44 @@ Item
     Price:
     Value: c.1,p.1
     Description:
+
+queries:
+    me: account > character > statblock
+                            > inventory
+
+    characters: list
+
+    oppenent: account > character > statblock
+                            > inventory
+
+    shop: items
+
+mutations
+    login: (name, email)
+
+    add account: (name, email, password)
+
+    add character: (name) > generate inventory
+                          > generate statblock
+
+    update inventory: > set to item => update statblock
+                        + pull from bag && push to bag
+                        || add item
+                        => +/- gold(optional)
+
+    update character (wins deaths gold)
+
+
+    remove character
+
+    remove account
+
+items
+
+short sword: 'range.2'
+long sword: 'range.4'
+bastard sword: 'range.4'
+
+    
+
+        

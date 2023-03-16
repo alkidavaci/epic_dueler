@@ -7,16 +7,10 @@ const itemSchema = new Schema({
         minLength: 2,
         trim: true
     },
-    icon: [{
-        url: {
-            type: String,
-            required: true
-        },
-        altText: {
-            type: String,
-            required: true
-        }
-    }],
+    icon: {
+        type: String,
+        default: '❔'
+    },
     itemtype: {
         type: String,
         required: true

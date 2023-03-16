@@ -4,6 +4,7 @@ const characterSchema = new Schema({
     name: {
         type: String,
         required: [true, 'Your character must have a name!'],
+        unique: true,
         minLength: 2,
         maxLength: 20,
         trim: true
@@ -33,10 +34,10 @@ const characterSchema = new Schema({
         ref: 'StatBlock',
         required: true
     },
-    isfighting: {
-        type: Boolean,
+    rating: {
+        type: Number,
         required: true,
-        default: false
+        default: 0
     }
 });
 
