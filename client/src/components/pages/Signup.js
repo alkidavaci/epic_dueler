@@ -37,7 +37,7 @@ const Signup = () => {
         }
 
         setFormState({
-            name: "",
+            username: "",
             email: "",
             password: "",
         });
@@ -57,14 +57,14 @@ const Signup = () => {
                             <form onSubmit={handleFormSubmit}>
                                 <div className='column is-12'>
                                     <div className='field'>
-                                        <label className='label'>Character Name</label>
+                                        <label className='label'>Username</label>
                                         <div className='control'>
                                             <input
                                                 className="input"
                                                 placeholder="Your username"
-                                                name="name"
+                                                name="username"
                                                 type="text"
-                                                value={formState.name}
+                                                value={formState.username}
                                                 onChange={handleChange}
                                             />
                                         </div>
