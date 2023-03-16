@@ -15,11 +15,11 @@ const Signup = () => {
     const [addProfile, { error, data }] = useMutation(ADD_ACCOUNT);
 
     const handleChange = (event) => {
-        const { username, value } = event.target;
+        const { name, value } = event.target;
 
         setFormState({
             ...formState,
-            [username]: value,
+            [name]: value,
         });
     };
 
@@ -35,22 +35,29 @@ const Signup = () => {
         } catch (e) {
             console.error(e);
         }
-    }
+
+        setFormState({
+            name: "",
+            email: "",
+            password: "",
+        });
+
+    };
 
     return (
-        
+
         <main className="section">
             <div className="container">
                 <div className="columns is-centered">
                     <div className="card-body">
-                    <h4 className='label' style={{}}>Sign Up</h4>
+                        <h4 className='label columns is-centered' style={{}}>Sign Up</h4>
                         {data ? (
-                            <Inventory/>
+                            <Inventory />
                         ) : (
                             <form onSubmit={handleFormSubmit}>
                                 <div className='column is-12'>
                                     <div className='field'>
-                                    <label className='label'>Character Name</label>
+                                        <label className='label'>Character Name</label>
                                         <div className='control'>
                                             <input
                                                 className="input"
@@ -61,8 +68,8 @@ const Signup = () => {
                                                 onChange={handleChange}
                                             />
                                         </div>
-                                        <div>
-                                        <label className='label'>Email</label>
+                                        <div className='field'>
+                                            <label className='label'>Email</label>
                                             <input
                                                 className="input"
                                                 placeholder="Your email"
@@ -97,7 +104,7 @@ const Signup = () => {
                         )}
 
                         {error && (
-                            <div className="my-3 p-3 bg-danger text-white">
+                            <div className="notification is-danger">
                                 {error.message}
                             </div>
                         )}
