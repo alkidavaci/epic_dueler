@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import Auth from '../../utils/Auth';
+import Nav  from '../Nav'
 
 function Header() {
   // Set isLoggedIn to true or false based on whether the user is logged in
@@ -30,6 +31,7 @@ function Header() {
     <div className="navbar-menu">
       <h1 className="title">Epic Dueler</h1>
       {isLoggedIn && (
+        <div className='is-flex-direction-column'>
         <div className="navbar-end">
           <div className="navbar-item">
             Hi, {username}
@@ -37,6 +39,10 @@ function Header() {
           <div className="navbar-item" onClick={handleLogout}>
             Logout
           </div>
+        </div>
+        <div>
+          <Nav />
+        </div>
         </div>
       )}
     </div>
