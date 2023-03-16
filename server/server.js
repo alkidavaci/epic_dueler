@@ -29,7 +29,7 @@ const startApolloServer = async (typeDefs, resolvers) => {
     '/graphql',
     cors(),
     json(),
-    expressMiddleware(server),
+    expressMiddleware(server, { context: authMiddleware }),
   );
   app.use(express.urlencoded({ extended: true }));
   app.use(express.json());
@@ -46,7 +46,7 @@ const startApolloServer = async (typeDefs, resolvers) => {
   db.once('open', () => {
     app.listen(PORT, () => {
       console.log(`🌍 Now listening on port:${PORT}`)
-      console.log(`Use GraphQL at http://localhost:${PORT}${server.graphqlPath}`)
+      console.log(`Use GraphQL at http://localhost:${PORT}/graphql`)
     });
   });
 };

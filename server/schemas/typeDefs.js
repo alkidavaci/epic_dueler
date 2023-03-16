@@ -60,14 +60,20 @@ const typeDefs = gql`
 
   type Query {
     me: Account
-    opponent: Character
+    opponent(_id: ID!): Character
     shop: [Item]
     characters: [Character]
   }
 
   type Mutation {
     login(email: String!, password: String!): Auth
-    addAccount(username: String!, email: String!, password: String!): Auth
+    addAccount(email: String!, password: String!): Auth
+    addCharacter(email: String!, name: String!): Character
+    updateCharacter(name: String!, win: Boolean!, gain: Int!): Character
+    updateInventory(characterId: ID!, inventoryId: ID!, itemId: ID!, action: String!, slot: String): Inventory
+    removeCharacter(characterId: ID!): Character
+    removeAccount(accountId: ID!): Account
+
 
   }
 `;
