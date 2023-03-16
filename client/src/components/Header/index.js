@@ -37,7 +37,7 @@ function Header() {
             Hi, {username}
           </div>
           <div className="navbar-item" onClick={handleLogout}>
-            Logout
+           <button>Logout</button> 
           </div>
         </div>
         <div>
