@@ -39,15 +39,87 @@ mutation addCharacter($name: String!) {
 export const UPDATE_INVENTORY = gql`
 mutation updateInventory($characterId: ID!, $inventoryId: ID!, $itemId: ID!, $action: String!, $slot: String) {
     updateInventory(characterId: $characterId, inventoryId: $inventoryId, itemId: $itemId, action: $action, slot: $slot) {
-      character {
+
         _id
         name
         gold
+        wins
+        deaths
         rating
-        statblock
-        inventory
-      }
-    }
+        inventory {
+          weapon {
+            _id
+            name
+            icon
+            itemtype
+            price
+            value
+            description
+          }
+          armor {
+            _id
+            name
+            icon
+            itemtype
+            price
+            value
+            description
+          }
+          slot1 {
+            _id
+            name
+            icon
+            itemtype
+            price
+            value
+            description
+          }
+          slot2 {
+            _id
+            name
+            icon
+            itemtype
+            price
+            value
+            description
+          }
+          slot3 {
+            _id
+            name
+            icon
+            itemtype
+            price
+            value
+            description
+          }
+          slot4 {
+            _id
+            name
+            icon
+            itemtype
+            price
+            value
+            description
+          }
+          bag {
+            _id
+            name
+            icon
+            itemtype
+            price
+            value
+            description
+          }
+        }
+        statblock {
+          hp
+          range
+          attack
+          defense
+          crit
+          parry
+        }
+     }
   }
 `;
 

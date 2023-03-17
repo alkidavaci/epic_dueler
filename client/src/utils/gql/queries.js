@@ -96,9 +96,6 @@ export const QUERY_OPPONENT = gql`
         wins
         deaths
         rating
-        inventory {
-          _id
-        }
         statblock {
           hp
           range
@@ -112,25 +109,26 @@ export const QUERY_OPPONENT = gql`
 `;
 
 export const QUERY_SHOP = gql`
-  query shop {
-    item {
+  query getShop {  
+    shop {
       _id
-        name
-        gold
-        wins
-        deaths
-        rating
-        inventory {
-          _id
-        }
-        statblock {
-          hp
-          range
-          attack
-          defense
-          crit
-          parry
-        } 
+      name
+      icon
+      itemtype
+      price
+      value
+      description         
+    }
+  }
+`;
+
+export const QUERY_CHARACTERS = gql`
+  query getCharacters {
+    characters {
+      name
+      wins
+      deaths
+      rating       
     }
   }
 `;
