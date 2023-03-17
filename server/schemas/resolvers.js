@@ -1,4 +1,4 @@
-const { AuthenticationError } = require('@apollo/server');
+const { AuthenticationError } = require('@apollo/server/express4');
 const { Account, Character, Inventory, Item, StatBlock } = require('../models');
 const { signToken } = require('../utils/auth');
 
@@ -7,6 +7,7 @@ const resolvers = {
     Query: {
 
         me: async (parent, args, context) => {
+            console.log(context.account);
             if (context.account) {
                 if (context.account.character) {
                     const characterData = await Character
