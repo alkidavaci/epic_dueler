@@ -6,7 +6,7 @@ const Inventory = () => {
   const { loading, data, error } = useQuery(QUERY_ME);
   const profiles = data?.profiles || [];
   const inventory = profiles.inventory || [];
-
+console.log(data)
   if (loading) {
     return <div>Loading...</div>;
   } else if (data) { 
