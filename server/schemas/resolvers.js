@@ -7,16 +7,15 @@ const resolvers = {
     Query: {
 
         me: async (parent, args, context) => {
-            console.log(context.account);
+            console.log("hey", context.account.username);
             if (context.account) {
-                if (context.account.character) {
+               
                     const characterData = await Character
                         .findOne({ name: context.account.username })
                         .populate("inventory")
                         .populate("statblock");
                     return characterData;
-                };
-                throw new Error("No Character found!");
+                
             };
             throw new Error("Not logged in!");
         },
