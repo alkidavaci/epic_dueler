@@ -3,14 +3,16 @@ import { useQuery } from "@apollo/client";
 import { QUERY_ME } from "../utils/gql/queries";
 
 const Inventory = () => {
-  const { loading, data } = useQuery(QUERY_ME);
+  const { loading, data, error } = useQuery(QUERY_ME);
   const profiles = data?.profiles || [];
   const inventory = profiles.inventory || [];
 
   if (loading) {
     return <div>Loading...</div>;
-  } else {
+  } else if (data) { 
     console.log(data);
+  }else {
+    console.log(JSON.parse(JSON.stringify(error)))
   }
 
   return (

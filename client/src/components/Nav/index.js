@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 
-const Navbar = () => {
+const Nav = () => {
   return (
     <nav className="navbar is-primary">
       <div className="container">
@@ -22,4 +22,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default Nav;
