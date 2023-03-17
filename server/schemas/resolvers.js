@@ -13,7 +13,8 @@ const resolvers = {
                     const characterData = await Character
                         .findOne({ name: context.account.username })
                         .populate("inventory")
-                        .populate("statblock");
+                        .populate("statblock")
+                        .populate([ { path: 'inventory', populate: [{ path: 'weapon' }, { path: 'armor' }, { path: 'slot1' }, { path: 'slot2' }, { path: 'slot3' }, { path: 'slot4' }, { path: 'bag' }] } ]).exec();
                     return characterData;
                 
             };
