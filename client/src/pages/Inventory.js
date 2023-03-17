@@ -3,16 +3,16 @@ import { useQuery } from "@apollo/client";
 import { QUERY_ME } from "../utils/gql/queries";
 
 const Inventory = () => {
-  const { loading, data, error } = useQuery(QUERY_ME);
-  const profiles = data?.profiles || [];
-  const inventory = profiles.inventory || [];
-console.log(data)
+  const { loading, data: dateInv, error:errorInv } = useQuery(QUERY_ME);
+  const userInv = dateInv?.me || [];
+  const inventory = userInv.character.inventory || [];
+console.log(dateInv)
   if (loading) {
     return <div>Loading...</div>;
-  } else if (data) { 
-    console.log(data);
+  } else if (dateInv) { 
+    console.log(dateInv);
   }else {
-    console.log(JSON.parse(JSON.stringify(error)))
+    console.log(JSON.parse(JSON.stringify(errorInv)))
   }
 
   return (
