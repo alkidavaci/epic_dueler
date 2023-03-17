@@ -29,4 +29,4 @@ const InventoryList = () => {
   );
 };
 
-export default InventoryBar;
+export default InventoryList;
