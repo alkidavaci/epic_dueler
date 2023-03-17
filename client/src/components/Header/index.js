@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import Auth from '../../utils/Auth';
 import Nav  from '../Nav'
+import Inventory  from '../../pages/Inventory'
 
 function Header() {
   // Set isLoggedIn to true or false based on whether the user is logged in
@@ -42,6 +43,7 @@ function Header() {
         </div>
         <div>
           <Nav />
+          <Inventory />
         </div>
         </div>
       )}
