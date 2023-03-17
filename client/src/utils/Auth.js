@@ -38,6 +38,7 @@ class AuthService {
     // Reload to Inventory(Is as a profile page)
     
     window.location.assign('#/inventory');
+
   }
 
   logout() {

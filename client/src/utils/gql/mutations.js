@@ -25,14 +25,12 @@ mutation addAccount($username: String!, $email: String!, $password: String!) {
 `;
 
 export const ADD_CHARACTER = gql`
-mutation addCharacter($username: String!, $name: String!) {
-    addCharacter(username: $username, name: $name) {
-      account {
-        username
+mutation addCharacter($name: String!) {
+    addCharacter(name: $name) {  
         character {
           _id
           name
-       }
+       
       }
     }
   }
