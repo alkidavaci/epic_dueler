@@ -1,11 +1,13 @@
 import { useState } from "react";
-import { useMutation } from "@apollo/client";
-import { LOGIN } from "../../utils/gql/mutations";
-
-import Auth from "../../utils/Auth";
-
-import Inventory from '../pages/Inventory';
 import { Link } from "react-router-dom";
+import { useMutation, useQuery } from "@apollo/client";
+import { LOGIN } from "../utils/gql/mutations";
+import { QUERY_ME } from "../utils/gql/queries";
+import Inventory from './Inventory'
+import Auth from "../utils/Auth";
+
+// import Inventory from '../pages/Inventory';
+
 
 const Login = (props) => {
   const [formState, setFormState] = useState({ username: "", password: "" });
@@ -29,37 +31,41 @@ const Login = (props) => {
       const { data } = await login({
         variables: { ...formState },
       });
-
+      console.log({ data });
       Auth.login(data.login.token);
+
+
     } catch (e) {
-      console.error(e);
+      console.error(JSON.parse(JSON.stringify(e)));
     }
 
-    // Clear form values
+    // Clear form values 
     setFormState({
       username: "",
       password: "",
     });
+
+
   };
 
   return (
-    <section className="section">
-      <div className="container">
-        <div className="columns is-centered">
-          {data ? (
-            <Inventory />
-          ) : (
+    <>
+      {data ? (
+        <Inventory />
+      ) : (<section className="section">
+        <div className="container">
+          <div className="columns is-centered">
             <form onSubmit={handleFormSubmit}>
               <div className="column is-12">
                 <div className="field">
-                  <label className="label">Email</label>
+                  <label className="label">Username</label>
                   <div className="control">
                     <input
                       className="input"
-                      type="email"
-                      placeholder="Your Email"
-                      name="email"
-                      value={formState.email}
+                      type="test"
+                      placeholder="Your Username"
+                      name="username"
+                      value={formState.username}
                       onChange={handleChange}
                     />
                   </div>
@@ -89,20 +95,20 @@ const Login = (props) => {
                   </div>
                 </div>
                 <div><Link to="/signup" >
-                 Create A New Character
+                  Create A New Character
                 </Link></div>
               </div>
             </form>
-
-          )}
-          {error && (
-            <div className="notification is-danger">
-              <p className="my-3">{error.message}</p>
-            </div>
-          )}
+          </div>
+        </div> </section>
+      )}
+      {error && (
+        <div className="notification is-danger">
+          <p className="my-3">{error.message}</p>
         </div>
-      </div>
-    </section>
+      )}
+
+    </>
   );
 };
 

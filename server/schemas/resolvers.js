@@ -1,4 +1,4 @@
-const { AuthenticationError } = require('@apollo/server');
+const { AuthenticationError } = require('@apollo/server/express4');
 const { Account, Character, Inventory, Item, StatBlock } = require('../models');
 const { signToken } = require('../utils/auth');
 
@@ -7,6 +7,7 @@ const resolvers = {
     Query: {
 
         me: async (parent, args, context) => {
+            console.log(context.account);
             if (context.account) {
                 if (context.account.character) {
                     const characterData = await Character
@@ -15,7 +16,7 @@ const resolvers = {
                         .populate("statblock");
                     return characterData;
                 };
-                throw new AuthenticationError("No Character found!");
+                throw new Error("No Character found!");
             };
             throw new AuthenticationError("Not logged in!");
         },
@@ -42,15 +43,15 @@ const resolvers = {
 
     Mutation: {
 
-        login: async (parent, { email, password }) => {
-            const account = await Account.findOne({ email });
+        login: async (parent, { username, password }) => {
+            const account = await Account.findOne({ username });
             if (!account) {
-                throw new AuthenticationError("Username or Password does not match!");
+                throw new Error("Username or Password does not match!");
             };
 
             const correctPw = await account.isCorrectPassword(password);
             if (!correctPw) {
-                throw new AuthenticationError("Username or Password does not match!");
+                throw new Error("Username or Password does not match!");
             };
 
             const token = signToken(account);
@@ -67,19 +68,20 @@ const resolvers = {
 
         },
 
-        addCharacter: async (parent, { username, name }) => {
+        addCharacter: async (parent, { name }) => {
 
             const emptyItem = await Item.findOne({ name: "empty" });
             const inventory = await Inventory.create({ weapon: emptyItem._id, armor: emptyItem._id, slot1: emptyItem._id, slot2: emptyItem._id, slot3: emptyItem._id, slot4: emptyItem._id });
             const statblock = await StatBlock.create({});
-            const character = await Character.create({ name, inventory: inventory._id, statblock: statblock._id });
+            const character = await Character.create({ name: name, inventory: inventory._id, statblock: statblock._id });
+            
             const account = await Account.findOneAndUpdate(
-                { username: username },
+                { username: name },
                 { $set: { character: character._id } },
                 { new: true }
             ).populate('character');
             if (!account) {
-                throw new AuthenticationError("Username or Password does not match!");
+                throw new Error("Username or Password does not match!");
             };
 
             return { account };

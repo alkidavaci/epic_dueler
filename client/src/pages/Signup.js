@@ -1,18 +1,33 @@
 import React, { useState } from 'react';
-import { ADD_ACCOUNT } from '../../utils/gql/mutations';
+import { ADD_ACCOUNT, ADD_CHARACTER } from '../utils/gql/mutations';
 
 import { useMutation } from '@apollo/client';
 
 import Inventory from '../pages/Inventory';
-import Auth from '../../utils/Auth';
+import Auth from '../utils/Auth';
+
+
 
 const Signup = () => {
+    const [addCharacter, { error: charError, data: charData }] = useMutation(ADD_CHARACTER);
+    const [addProfile, { error: profileError, data: profileData }] = useMutation(ADD_ACCOUNT);
     const [formState, setFormState] = useState({
         username: '',
         email: '',
         password: '',
     });
-    const [addProfile, { error, data }] = useMutation(ADD_ACCOUNT);
+
+    const generateChar = async (name) => {
+        try {
+    
+            const { data } = await addCharacter({
+                variables: { name: name },
+            });
+            console.log(data);
+        } catch (e) {
+            console.error(JSON.parse(JSON.stringify(e)));
+        }
+    };
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -30,10 +45,15 @@ const Signup = () => {
             const { data } = await addProfile({
                 variables: { ...formState },
             });
+            console.log(data);
 
-            Auth.login(data.addProfile.token);
+            // console.log(name);
+            Auth.login(data.addAccount.token);
+            var name = data.addAccount.account.username;
+            console.log(name);
+            generateChar(name);
         } catch (e) {
-            console.error(e);
+            console.error(JSON.parse(JSON.stringify(e)));
         }
 
         setFormState({
@@ -51,7 +71,7 @@ const Signup = () => {
                 <div className="columns is-centered">
                     <div className="card-body">
                         <h4 className='label columns is-centered' style={{}}>Sign Up</h4>
-                        {data ? (
+                        {charData ? (
                             <Inventory />
                         ) : (
                             <form onSubmit={handleFormSubmit}>
@@ -103,9 +123,9 @@ const Signup = () => {
                             </form>
                         )}
 
-                        {error && (
+                        {charError && (
                             <div className="notification is-danger">
-                                {error.message}
+                                {charError.message}
                             </div>
                         )}
                     </div>

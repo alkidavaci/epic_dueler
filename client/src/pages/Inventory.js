@@ -1,14 +1,18 @@
 import { useState } from "react";
 import { useQuery } from "@apollo/client";
-import { QUERY_ME } from "../../utils/gql/queries";
+import { QUERY_ME } from "../utils/gql/queries";
 
-const InventoryBar = () => {
-  const { loading, data } = useQuery(QUERY_ME);
+const Inventory = () => {
+  const { loading, data, error } = useQuery(QUERY_ME);
   const profiles = data?.profiles || [];
   const inventory = profiles.inventory || [];
 
   if (loading) {
     return <div>Loading...</div>;
+  } else if (data) { 
+    console.log(data);
+  }else {
+    console.log(JSON.parse(JSON.stringify(error)))
   }
 
   return (
@@ -41,4 +45,4 @@ const InventoryBar = () => {
   );
 };
 
-export default InventoryBar;
+export default Inventory;

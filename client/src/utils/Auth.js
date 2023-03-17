@@ -36,7 +36,9 @@ class AuthService {
     // Saves user token to localStorage
     localStorage.setItem('id_token', idToken);
     // Reload to Inventory(Is as a profile page)
-    window.location.assign('/inventory');
+    
+    window.location.assign('#/inventory');
+
   }
 
   logout() {
