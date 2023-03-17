@@ -3,14 +3,12 @@ import { gql } from '@apollo/client';
 export const QUERY_ME = gql`
   query me {
     me {
-      _id
-      username 
-      character {
         _id
         name
         gold
         wins
         deaths
+        rating
         inventory {
           weapon {
             _id
@@ -25,8 +23,8 @@ export const QUERY_ME = gql`
           crit
           parry
         }
-      }  
-    }
+     }  
+    
   }
 `;
 
@@ -38,11 +36,41 @@ export const QUERY_OPPONENT = gql`
         gold
         wins
         deaths
+        rating
         inventory {
           _id
         }
         statblock {
+          hp
+          range
+          attack
+          defense
+          crit
+          parry
+        } 
+    }
+  }
+`;
+
+export const QUERY_SHOP = gql`
+  query shop {
+    item {
+      _id
+        name
+        gold
+        wins
+        deaths
+        rating
+        inventory {
           _id
+        }
+        statblock {
+          hp
+          range
+          attack
+          defense
+          crit
+          parry
         } 
     }
   }
