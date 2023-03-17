@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useMutation, useQuery } from "@apollo/client";
 import { LOGIN } from "../utils/gql/mutations";
 import { QUERY_ME } from "../utils/gql/queries";
-
+import Inventory from './Inventory'
 import Auth from "../utils/Auth";
 
 // import Inventory from '../pages/Inventory';
@@ -31,9 +31,9 @@ const Login = (props) => {
       const { data } = await login({
         variables: { ...formState },
       });
-      console.log({data});
+      console.log({ data });
       Auth.login(data.login.token);
-      
+
 
     } catch (e) {
       console.error(JSON.parse(JSON.stringify(e)));
@@ -49,12 +49,12 @@ const Login = (props) => {
   };
 
   return (
-    <section className="section">
-      <div className="container">
-        <div className="columns is-centered">
-          {data ? (
-            <div>Logged in</div>
-          ) : (
+    <>
+      {data ? (
+        <Inventory />
+      ) : (<section className="section">
+        <div className="container">
+          <div className="columns is-centered">
             <form onSubmit={handleFormSubmit}>
               <div className="column is-12">
                 <div className="field">
@@ -99,16 +99,16 @@ const Login = (props) => {
                 </Link></div>
               </div>
             </form>
-
-          )}
-          {error && (
-            <div className="notification is-danger">
-              <p className="my-3">{error.message}</p>
-            </div>
-          )}
+          </div>
+        </div> </section>
+      )}
+      {error && (
+        <div className="notification is-danger">
+          <p className="my-3">{error.message}</p>
         </div>
-      </div>
-    </section>
+      )}
+
+    </>
   );
 };
 
