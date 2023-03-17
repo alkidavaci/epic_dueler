@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import Auth from '../../utils/Auth';
-import Nav  from '../Nav'
-import Inventory  from '../../pages/Inventory'
+import Nav from '../Nav'
+import Inventory from '../../pages/Inventory';
+import Button from 'react-bootstrap/Button';
 
 function Header() {
   // Set isLoggedIn to true or false based on whether the user is logged in
@@ -27,29 +28,30 @@ function Header() {
   };
 
   return (
-<div className="header">
-  <nav className="navbar is-primary" role="navigation" aria-label="main navigation">
-    <div className="navbar-menu">
-      <h1 className="title">Epic Dueler</h1>
-      {isLoggedIn && (
-        <div className='is-flex-direction-column'>
-        <div className="navbar-end">
-          <div className="navbar-item">
-            Hi, {username}
+    <div className="header"  >
+      <nav className="navbar is-primary" style={{ boxShadow: ' 0 0 8px #999' }} role="navigation" aria-label="main navigation" >
+
+        <h1 className="title" style={{ fontSize: '50px', left: '963px', position: 'absolute', padding: '25px', top: '15px' }}>Epic Dueler</h1>
+        {isLoggedIn && (
+          <div className='is-flex-direction-column'>
+
+            <div className="navbar-item" style={{ top: '10px', color: 'black', fontSize: '40px', fontFamily: 'monospace' }}>
+              Hello, {username}!
+            </div>
+            <div className="navbar-item" onClick={handleLogout}>
+              <Button style={{ width: "5rem", height: "5rem", position: "relative", fontSize: '20px', borderRadius: '100%', left: '2000px', backgroundColor: 'orange', fontFamily: 'monospace' }}
+                variant="outline-primary"
+                className="rounded-circle">Logout</Button>
+            </div>
+
+            <div>
+              <Nav />
+              <Inventory />
+            </div>
           </div>
-          <div className="navbar-item" onClick={handleLogout}>
-           <button>Logout</button> 
-          </div>
-        </div>
-        <div>
-          <Nav />
-          <Inventory />
-        </div>
-        </div>
-      )}
+        )}
+      </nav>
     </div>
-  </nav>
-</div>
 
   );
 }
