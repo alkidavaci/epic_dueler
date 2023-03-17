@@ -12,10 +12,18 @@ export const QUERY_ME = gql`
         wins
         deaths
         inventory {
-          _id
+          weapon {
+            _id
+          }
+          
         }
         statblock {
-          _id
+          hp
+          range
+          attack
+          defense
+          crit
+          parry
         }
       }  
     }

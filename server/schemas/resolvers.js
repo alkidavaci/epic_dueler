@@ -10,14 +10,14 @@ const resolvers = {
             if (context.account) {
                 if (context.account.character) {
                     const characterData = await Character
-                        .findOne({ _id: context.account.character })
+                        .findOne({ _id: context.account.character._id })
                         .populate("inventory")
                         .populate("statblock");
                     return characterData;
                 };
-                throw new AuthenticationError("No Character found!");
+                throw new Error("No Character found!");
             };
-            throw new AuthenticationError("Not logged in!");
+            throw new Error("Not logged in!");
         },
 
         opponent: async (parent, args, context) => {
@@ -27,7 +27,7 @@ const resolvers = {
                     .populate("statblock");
                 return opponentData;
             };
-            throw new AuthenticationError("No Character found!");
+            throw new Error("No Character found!");
         },
 
         shop: async () => {
@@ -214,7 +214,7 @@ const resolvers = {
 
                     return { char };
                 default:
-                    throw new AuthenticationError("Action Not Possible!");
+                    throw new Error("Action Not Possible!");
             }
 
         },

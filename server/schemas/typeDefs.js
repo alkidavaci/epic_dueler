@@ -60,7 +60,7 @@ const typeDefs = gql`
   }
 
   type Query {
-    me: Account
+    me: Character
     opponent(_id: ID!): Character
     shop: [Item]
     characters: [Character]
