@@ -64,11 +64,11 @@ function App() {
                   path="/inventory" 
                   element={<Inventory />} 
                 />
-                  {/* <Route 
+                  <Route 
                   path="/fight" 
                   element={<Fight />} 
                 />
-                  <Route 
+                  {/* <Route 
                   path="/shop" 
                   element={<Shop />} 
                 />

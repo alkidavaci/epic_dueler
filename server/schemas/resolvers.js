@@ -9,34 +9,37 @@ const resolvers = {
         me: async (parent, args, context) => {
             console.log("hey", context.account.username);
             if (context.account) {
-               
-                    const characterData = await Character
-                        .findOne({ name: context.account.username })
-                        .populate("inventory")
-                        .populate("statblock")
-                        .populate([ { path: 'inventory', populate: [{ path: 'weapon' }, { path: 'armor' }, { path: 'slot1' }, { path: 'slot2' }, { path: 'slot3' }, { path: 'slot4' }, { path: 'bag' }] } ]).exec();
-                    return characterData;
-                
+
+                const characterData = await Character
+                    .findOne({ name: context.account.username })
+                    .populate("inventory")
+                    .populate("statblock")
+                    .populate([{ path: 'inventory', populate: [{ path: 'weapon' }, { path: 'armor' }, { path: 'slot1' }, { path: 'slot2' }, { path: 'slot3' }, { path: 'slot4' }, { path: 'bag' }] }]).exec();
+                return characterData;
+
             };
             throw new Error("Not logged in!");
         },
 
-        opponent: async (parent, args, context) => {
-            if (context.account.character) {
-                const opponentData = await Character
-                    .findOne({ _id: context.character._id })
-                    .populate("statblock");
+        opponent: async (parent, { name }) => {
+
+            const opponentData = await Character
+                .findOne({ name: name })
+                .populate("statblock");
+            if (opponentData) {
                 return opponentData;
-            };
-            throw new Error("No Character found!");
+            } else {
+
+                throw new Error("No Character found!");
+            }
         },
 
         shop: async () => {
             return Item.find({});
         },
 
-        characters: async () => {
-            return Character.find({});
+        characters: async (parent, args, context) => {
+            return Character.find({ name: { $ne: context.account.username }});
         },
 
     },
@@ -74,7 +77,7 @@ const resolvers = {
             const inventory = await Inventory.create({ weapon: emptyItem._id, armor: emptyItem._id, slot1: emptyItem._id, slot2: emptyItem._id, slot3: emptyItem._id, slot4: emptyItem._id });
             const statblock = await StatBlock.create({});
             const character = await Character.create({ name: name, inventory: inventory._id, statblock: statblock._id });
-            
+
             const account = await Account.findOneAndUpdate(
                 { username: name },
                 { $set: { character: character._id } },
@@ -126,9 +129,9 @@ const resolvers = {
                         var stat = oldStat[i].split('.');
                         let change = -(parseInt(stat[1]));
                         if (stat[0] === 'range') {
-                            ratingChange -= (change/2);
+                            ratingChange -= (change / 2);
                         } else if (stat[0] === 'hp') {
-                            ratingChange -= (change/12);
+                            ratingChange -= (change / 12);
                         } else {
                             ratingChange -= change;
                         }
@@ -147,9 +150,9 @@ const resolvers = {
                             var stat = newItemStat[i].split('.');
                             let change = parseInt(stat[1]);
                             if (stat[0] === 'range') {
-                                ratingChange += (change/2);
+                                ratingChange += (change / 2);
                             } else if (stat[0] === 'hp') {
-                                ratingChange += (change/12);
+                                ratingChange += (change / 12);
                             } else {
                                 ratingChange += change;
                             }
@@ -173,7 +176,9 @@ const resolvers = {
                         { _id: characterId },
                         { $inc: { rating: ratingChange } },
                         { new: true }
-                    ).populate('inventory').populate('statblock');
+                    ).populate("inventory")
+                    .populate("statblock")
+                    .populate([{ path: 'inventory', populate: [{ path: 'weapon' }, { path: 'armor' }, { path: 'slot1' }, { path: 'slot2' }, { path: 'slot3' }, { path: 'slot4' }, { path: 'bag' }] }]).exec();
 
                     return { char };
 
@@ -211,7 +216,9 @@ const resolvers = {
                         { _id: characterId },
                         { $inc: { gold: cost } },
                         { new: true }
-                    ).populate('inventory').populate('statblock');
+                    ).populate("inventory")
+                    .populate("statblock")
+                    .populate([{ path: 'inventory', populate: [{ path: 'weapon' }, { path: 'armor' }, { path: 'slot1' }, { path: 'slot2' }, { path: 'slot3' }, { path: 'slot4' }, { path: 'bag' }] }]).exec();
 
                     return { char };
                 default:
@@ -228,7 +235,9 @@ const resolvers = {
                     { name: name },
                     { $inc: { [`wins`]: 1 }, $inc: { [`gold`]: gain } },
                     { new: true }
-                )
+                ).populate("inventory")
+                .populate("statblock")
+                .populate([{ path: 'inventory', populate: [{ path: 'weapon' }, { path: 'armor' }, { path: 'slot1' }, { path: 'slot2' }, { path: 'slot3' }, { path: 'slot4' }, { path: 'bag' }] }]).exec();
 
             } else {
                 const resTax = -(Math.floor(gain / 2));
@@ -236,7 +245,9 @@ const resolvers = {
                     { name: name },
                     { $inc: { [`deaths`]: 1 }, $inc: { [`gold`]: resTax } },
                     { new: true }
-                )
+                ).populate("inventory")
+                .populate("statblock")
+                .populate([{ path: 'inventory', populate: [{ path: 'weapon' }, { path: 'armor' }, { path: 'slot1' }, { path: 'slot2' }, { path: 'slot3' }, { path: 'slot4' }, { path: 'bag' }] }]).exec();
             };
 
             return { char };
