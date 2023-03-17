@@ -4,18 +4,38 @@ export const QUERY_ME = gql`
   query me {
     me {
       _id
-      name  
-      character    
+      username 
+      character {
+        _id
+        name
+        gold
+        wins
+        deaths
+        inventory {
+          _id
+        }
+        statblock {
+          _id
+        }
+      }  
     }
   }
 `;
 
-export const QUERY_PROFILES = gql`
-  query allProfiles {
-    profiles {
+export const QUERY_OPPONENT = gql`
+  query opponent {
+    opponent {
       _id
-      name 
-      character  
+        name
+        gold
+        wins
+        deaths
+        inventory {
+          _id
+        }
+        statblock {
+          _id
+        } 
     }
   }
 `;

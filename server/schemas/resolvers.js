@@ -45,12 +45,12 @@ const resolvers = {
         login: async (parent, { username, password }) => {
             const account = await Account.findOne({ username });
             if (!account) {
-                throw new AuthenticationError("Username or Password does not match!");
+                throw new Error("Username or Password does not match!");
             };
 
             const correctPw = await account.isCorrectPassword(password);
             if (!correctPw) {
-                throw new AuthenticationError("Username or Password does not match!");
+                throw new Error("Username or Password does not match!");
             };
 
             const token = signToken(account);
@@ -67,19 +67,20 @@ const resolvers = {
 
         },
 
-        addCharacter: async (parent, { username, name }) => {
+        addCharacter: async (parent, { name }) => {
 
             const emptyItem = await Item.findOne({ name: "empty" });
             const inventory = await Inventory.create({ weapon: emptyItem._id, armor: emptyItem._id, slot1: emptyItem._id, slot2: emptyItem._id, slot3: emptyItem._id, slot4: emptyItem._id });
             const statblock = await StatBlock.create({});
-            const character = await Character.create({ name, inventory: inventory._id, statblock: statblock._id });
+            const character = await Character.create({ name: name, inventory: inventory._id, statblock: statblock._id });
+            
             const account = await Account.findOneAndUpdate(
-                { username: username },
+                { username: name },
                 { $set: { character: character._id } },
                 { new: true }
             ).populate('character');
             if (!account) {
-                throw new AuthenticationError("Username or Password does not match!");
+                throw new Error("Username or Password does not match!");
             };
 
             return { account };
