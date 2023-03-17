@@ -11,7 +11,7 @@ const resolvers = {
             if (context.account) {
                 if (context.account.character) {
                     const characterData = await Character
-                        .findOne({ _id: context.account.character._id })
+                        .findOne({ name: context.account.username })
                         .populate("inventory")
                         .populate("statblock");
                     return characterData;
