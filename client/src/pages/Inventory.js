@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useQuery } from "@apollo/client";
 import { QUERY_ME } from "../utils/gql/queries";
-// import { InventoryList } from "../components";
+import { InventoryList } from "../components";
 // const [selectedItem, setSelectedItem] = useState({
 //   item: {
 //     _id: '',
@@ -57,6 +57,7 @@ const Inventory = () => {
           </div>
         </div>
       ))}
+      <div><InventoryList inventory={inventory} /></div>
     </div>
   );
 }
