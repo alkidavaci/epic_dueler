@@ -36,8 +36,8 @@ const Inventory = () => {
   return (
     <div>
       <h2>Inventory</h2>
-      {Object.keys(inventory).map((key) => (
-        <div className={`dropdown ${activeDropdown === key ? 'is-active' : ''}`} key={key}>
+      {/* {Object.keys(inventory).map((key) => (
+        <div className={`dropdown ${activeDropdown === key ? 'is-active' : ''}`} key={key._id}>
           <div className="dropdown-trigger">
             <button className="button" onClick={() => handleDropdownClick(key)}>
               <span>{key}</span>
@@ -56,7 +56,7 @@ const Inventory = () => {
             </div>
           </div>
         </div>
-      ))}
+      ))} */}
       <div><InventoryList inventory={inventory} /></div>
     </div>
   );
