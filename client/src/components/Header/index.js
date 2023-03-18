@@ -33,7 +33,7 @@ function Header() {
 
         <h1 className="title" style={{ fontSize: '50px', left: '963px', position: 'absolute', padding: '25px', top: '15px' }}>Epic Dueler</h1>
         {isLoggedIn && (
-          <div className='is-flex-direction-column'>
+          <div className=''>
 
             <div className="navbar-item" style={{ top: '10px', color: 'black', fontSize: '40px', fontFamily: 'monospace' }}>
               Hello, {username}!

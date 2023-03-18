@@ -25,7 +25,7 @@ const resolvers = {
 
             const opponentData = await Character
                 .findOne({ name: name })
-                .populate("statblock");
+                .populate("statblock").populate("inventory").populate([{ path: 'inventory', populate: [{ path: 'weapon' }, { path: 'armor' }, { path: 'slot1' }, { path: 'slot2' }, { path: 'slot3' }, { path: 'slot4' }, { path: 'bag' }] }]).exec();
             if (opponentData) {
                 return opponentData;
             } else {
@@ -35,7 +35,7 @@ const resolvers = {
         },
 
         shop: async () => {
-            return Item.find({});
+            return Item.find({ name: { $ne: 'empty' }});
         },
 
         characters: async (parent, args, context) => {
