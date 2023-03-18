@@ -15,19 +15,16 @@ import { QUERY_ME } from "../utils/gql/queries";
 
 const Inventory = () => {
   const { loading, data, error } = useQuery(QUERY_ME);
-  const profile = data?.me || [];
-  const inventory = profile.inventory || [];
+  const inventory = data?.me?.inventory || [];
   console.log(inventory.weapon)
-  // const inventory ={
-  //   weapon: {
-  //     name: "Knife",
-  //     icon: "🔪",
-  //     itemtype: "weapon",
-  //     price: 50,
-  //     value: "range.2",
-  //     description: "A short bladed weapon. Damage: 1-6"
-  // }
-  // }
+  
+  // Dropdown active onclick
+  const [activeDropdown, setActiveDropdown] = useState(null);
+  const handleDropdownClick = (key) => {
+    setActiveDropdown((prevKey) => (prevKey === key ? null : key));
+  };
+
+// loading and errors
   if (loading) {
     return <div>Loading...</div>;
   } else if (data) {
@@ -37,34 +34,31 @@ const Inventory = () => {
   }
 
   return (
-    <>
-      <div>
-        {inventory.length > 0 &&
-          inventory.map((elem) => (
-            <div className="dropdown is-active" >
-              <div className="dropdown-trigger">
-                <button
-                  className="button"
-                  aria-haspopup="true"
-                  aria-controls="dropdown-menu"
-                >
-                </button>
-              </div>
-              <div className="dropdown-menu" id="dropdown-menu" role="menu">
-                <div className="dropdown-content">
-                      <a href="#" className="dropdown-item" key={elem}>
-                        {elem.name}
-                      </a>
-                  <span>{elem.icon}</span>
-                    
-                </div>
-              </div>
+    <div>
+      <h2>Inventory</h2>
+      {Object.keys(inventory).map((key) => (
+        <div className={`dropdown ${activeDropdown === key ? 'is-active' : ''}`} key={key}>
+          <div className="dropdown-trigger">
+            <button className="button" onClick={() => handleDropdownClick(key)}>
+              <span>{key}</span>
+              <span className="icon is-small">
+                <i className="fas fa-angle-down" aria-hidden="true"></i>
+              </span>
+            </button>
+          </div>
+          <div className="dropdown-menu" id="dropdown-menu" role="menu">
+            <div className="dropdown-content">
+              {inventory[key].map((item) => (
+                <a href="#" className="dropdown-item" key={item._id}>
+                  <img src={item.icon} alt={item.name} width="32" height="32" /> {item.name}
+                </a>
+              ))}
             </div>
-          ))}
-      </div>
-      {/* <div><InventoryList /></div> */}
-    </>
+          </div>
+        </div>
+      ))}
+    </div>
   );
-};
+}
 
 export default Inventory;
