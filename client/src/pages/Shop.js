@@ -6,7 +6,7 @@ const itemData = require('./itemData.json')
 
 
 
-function shopList() {
+function Shop() {
     
     
     return (
@@ -26,7 +26,7 @@ function shopList() {
     }
     
     
-    export default shopList;
+    export default Shop;
     
     
     // Having trouble accessing the amount of gold the character has 

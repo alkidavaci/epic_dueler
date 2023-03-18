@@ -68,11 +68,11 @@ function App() {
                   path="/fight" 
                   element={<Fight />} 
                 />
-                  {/* <Route 
+                  <Route 
                   path="/shop" 
                   element={<Shop />} 
                 />
-                   <Route 
+                   {/* <Route 
                   path="/battle" 
                   element={<Battle />} 
                 /> */}
