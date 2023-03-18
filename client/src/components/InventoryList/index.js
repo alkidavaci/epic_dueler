@@ -1,30 +1,35 @@
-import { useQuery } from "@apollo/client";
-import { QUERY_ME } from "../../utils/gql/queries";
+import { useMutation } from '@apollo/client';
+import { UPDATE_INVENTORY } from "../../utils/gql/mutations";
 
-const SellItem = () => {
-    
-}
-const InventoryList = () => {
-  const { loading, data } = useQuery(QUERY_ME);
-  const profiles = data?.profiles || [];
-  const inventory = profiles.inventory || [];
+const SellItem = ({ itemId, inventoryId, itemValue }) => {
+  const [updateInventory] = useMutation(UPDATE_INVENTORY, {
+    variables: {
+      id: inventoryId,
+      gold: itemValue,
+      itemId: itemId,
+    },
+  });
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+  const handleClick = () => {
+    updateInventory();
+  };
+
+  return handleClick ;
+};
+
+const InventoryList = ({ inventory }) => {
   return (
     <div className="item-container">
-      {inventory &&
-        inventory.items.map((item) => (
-          <ul>
-            <li>
+      {inventory.map((item) => (
+        <ul>
+          <li>
             <div className="item-icon">{item.icon}</div>
             <div className="item-name">{item.name}</div>
             <div className="item-value">{item.value}</div>
-            <button onClick={SellItem} className="btn item-btn">Sell</button>
-            </li>
-          </ul>
-        ))}
+            <button onClick={() => SellItem(item._id, inventory._id, item.value)} className="btn item-btn">Sell</button>
+          </li>
+        </ul>
+      ))}
     </div>
   );
 };
