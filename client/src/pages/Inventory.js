@@ -4,20 +4,13 @@ import { QUERY_ME } from "../utils/gql/queries";
 import { UPDATE_INVENTORY } from '../utils/gql/mutations';
 import { InventoryList, UserCharacter } from "../components";
 import Auth from '../utils/Auth';
-// const [selectedItem, setSelectedItem] = useState({
-//   item: {
-//     _id: '',
-//     name: '',
-//     icon: '',
-//     price: '',
-//     value: '',
-//     description: ''
-//   }
-// });
+
 
 const Inventory = () => {
   const { loading, data, error } = useQuery(QUERY_ME);
+
   const [equipItem, { error: equipError, data: equipData }] = useMutation(UPDATE_INVENTORY);
+
   const inventory = data?.me?.inventory || [];
   console.log(inventory.bag)
 
@@ -32,7 +25,6 @@ const Inventory = () => {
 
   });
   const handleItemClick = async (item, slot) => {
-    console.log(item._id, slot)
     const token = Auth.loggedIn() ? Auth.getToken() : null;
     if (!token) {
       return false;
@@ -48,20 +40,7 @@ const Inventory = () => {
     }
     // setSelectedItem(item);
   };
-  // const [userInfo, setUserInfo] = useState({});
-console.log(data)
-// Handle user info
-// const newUserInfo = {
-//   name: data.me.name,
-//   gold: data.me.gold,
-//   wins: data.me.wins,
-//   deaths: data.me.deaths,
-// };
-
-// setUserInfo(newUserInfo);
-
-// console.log({userInfo});
-  // setUserCharacter(data.me);
+  
 
   // loading and errors
   if (loading) {
@@ -135,14 +114,14 @@ console.log(data)
         }
         return null;
       })}
-      <div className="columns">
-
-      <div className="column is-three-fifths">
-        <InventoryList data={data} />
-      </div>
+      <div className="columns m-6">
 
       <div className="column is-two-fifths">
         <UserCharacter data={data} />
+      </div>
+
+      <div className="column is-three-fifths">
+        <InventoryList data={data} />
       </div>
       
       </div>
