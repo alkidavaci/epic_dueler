@@ -1,0 +1,14 @@
+nav.navbar{
+    background-color: burlywood;
+    padding: 2rem;
+}
+h1.title {
+font-size: 3rem;
+color:black;
+
+}
+h1.title-home{
+    font-size: 3rem;
+color:black;
+text-align: center;
+}

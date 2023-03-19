@@ -1,0 +1,35 @@
+.hero {
+    background-color: #f2f2f2;
+    padding: 2rem;
+  }
+  
+  .container{
+    margin: 0;
+  }
+  
+  .box {
+    display: flex;
+    flex-direction: row;
+    background-color: #fff;
+    margin: 1rem;
+    padding: 1rem;
+    border: 1px solid #ccc;
+  }
+  
+  .in-line {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 1rem;
+    
+  }
+  .item-icon,.item-name,.item-value {
+    font-size: 2rem;
+    margin: 0 2rem;
+  }
+
+  
+  .button {
+    margin-left: 3rem;
+  }
+  

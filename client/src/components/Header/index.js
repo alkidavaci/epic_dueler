@@ -39,7 +39,7 @@ function Header() {
               Hello, {username}!
             </div>
             <div className="navbar-item" >
-              <button style={{ width: "5rem", height: "5rem",  fontSize: '20px', borderRadius: '100%', left: '2000px', backgroundColor: 'orange', fontFamily: 'monospace' }}
+              <button style={{ width: "5rem", height: "5rem", fontSize: '20px', borderRadius: '100%', left: '2000px', backgroundColor: 'orange', fontFamily: 'monospace' }}
                 variant="outline-primary"
                 className="rounded-circle" onClick={handleLogout}>Logout</button>
             </div>
