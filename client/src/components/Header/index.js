@@ -38,10 +38,10 @@ function Header() {
             <div className="navbar-item" style={{ top: '10px', color: 'black', fontSize: '40px', fontFamily: 'monospace' }}>
               Hello, {username}!
             </div>
-            <div className="navbar-item" onClick={handleLogout}>
-              <Button style={{ width: "5rem", height: "5rem", position: "relative", fontSize: '20px', borderRadius: '100%', left: '2000px', backgroundColor: 'orange', fontFamily: 'monospace' }}
+            <div className="navbar-item" >
+              <button style={{ width: "5rem", height: "5rem", fontSize: '20px', borderRadius: '100%', left: '2000px', backgroundColor: 'orange', fontFamily: 'monospace' }}
                 variant="outline-primary"
-                className="rounded-circle">Logout</Button>
+                className="rounded-circle" onClick={handleLogout}>Logout</button>
             </div>
 
             <div>

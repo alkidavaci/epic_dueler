@@ -35,6 +35,7 @@ function Shop() {
           console.error(JSON.parse(JSON.stringify(err)));
         }
       };
+
     return (
         <>
                 {loading ? (

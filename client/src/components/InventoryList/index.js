@@ -8,6 +8,7 @@ import Auth from '../../utils/Auth';
 var itemData;
 
 
+
 const InventoryList = ({ inventory }) => {
   const { loading, data: data1, error } = useQuery(QUERY_ME);
   const [sellItem, { error: purchaseError, data: purchaseData }] = useMutation(UPDATE_INVENTORY);
@@ -59,3 +60,97 @@ const InventoryList = ({ inventory }) => {
 };
 
 export default InventoryList;
+{/* 
+<div className="item-container is-full columns">
+        <div className="column is-three-fifths">
+          <section className="in-center ">
+            <div className="container ">
+              <ul className='is-full'>
+                <li className='box'>
+                  <div className="in-line level" >
+                    <div className="level-left">
+                      <div className="item-icon">🔪</div>
+                      <div className="item-name">name</div>
+                      <div className="item-value">value</div>
+                    </div>
+
+                    <div className="level-right">
+                      <button className="button is-primary is-medium">Sell</button>
+                    </div>
+                  </div>
+                </li>
+                <li className='box'>
+                  <div className="in-line level" >
+                    <div className="level-left">
+                      <div className="item-icon">🔪</div>
+                      <div className="item-name">name</div>
+                      <div className="item-value">value</div>
+                    </div>
+
+                    <div className="level-right">
+                      <button className="button is-primary is-medium">Sell</button>
+                    </div>
+                  </div>
+                </li>
+                <li className='box'>
+                  <div className="in-line level" >
+                    <div className="level-left">
+                      <div className="item-icon">🔪</div>
+                      <div className="item-name">name</div>
+                      <div className="item-value">value</div>
+                    </div>
+
+                    <div className="level-right">
+                      <button className="button is-primary is-medium">Sell</button>
+                    </div>
+                  </div>
+                </li>
+                <li className='box'>
+                  <div className="in-line level" >
+                    <div className="level-left">
+                      <div className="item-icon">🔪</div>
+                      <div className="item-name">name</div>
+                      <div className="item-value">value</div>
+                    </div>
+
+                    <div className="level-right">
+                      <button className="button is-primary is-medium">Sell</button>
+                    </div>
+                  </div>
+                </li>
+                <li className='box'>
+                  <div className="in-line level" >
+                    <div className="level-left">
+                      <div className="item-icon">🔪</div>
+                      <div className="item-name">name</div>
+                      <div className="item-value">value</div>
+                    </div>
+
+                    <div className="level-right">
+                      <button className="button is-primary is-medium">Sell</button>
+                    </div>
+                  </div>
+                </li>
+                <li className='box'>
+                  <div className="in-line level" >
+                    <div className="level-left">
+                      <div className="item-icon">🔪</div>
+                      <div className="item-name">name</div>
+                      <div className="item-value">value</div>
+                    </div>
+
+                    <div className="level-right">
+                      <button className="button is-primary is-medium">Sell</button>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </div>
+
+        <div className='column is-two-fifths'>
+          Charactery
+
+        </div>
+      </div> */}
