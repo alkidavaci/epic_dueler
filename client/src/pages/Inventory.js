@@ -17,7 +17,7 @@ const Inventory = () => {
   const { loading, data, error } = useQuery(QUERY_ME);
   const inventory = data?.me?.inventory || [];
   console.log(inventory)
-
+  
   // Dropdown active onclick
   const [activeDropdown, setActiveDropdown] = useState(null);
   const handleDropdownClick = (key) => {

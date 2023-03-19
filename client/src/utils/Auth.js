@@ -37,7 +37,7 @@ class AuthService {
     localStorage.setItem('id_token', idToken);
     // Reload to Inventory(Is as a profile page)
     
-    window.location.assign('#/inventory');
+    // window.location.assign('#/inventory');
 
   }
 
