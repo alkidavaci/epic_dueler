@@ -1,7 +1,9 @@
 import { useState } from "react";
-import { useQuery } from "@apollo/client";
+import { useQuery, useMutation } from "@apollo/client";
 import { QUERY_ME } from "../utils/gql/queries";
+import { UPDATE_INVENTORY } from '../utils/gql/mutations';
 import { InventoryList, UserCharacter } from "../components";
+import Auth from '../utils/Auth';
 // const [selectedItem, setSelectedItem] = useState({
 //   item: {
 //     _id: '',
@@ -15,6 +17,7 @@ import { InventoryList, UserCharacter } from "../components";
 
 const Inventory = () => {
   const { loading, data, error } = useQuery(QUERY_ME);
+  const [equipItem, { error: equipError, data: equipData }] = useMutation(UPDATE_INVENTORY);
   const inventory = data?.me?.inventory || [];
   console.log(inventory.bag)
 
@@ -28,8 +31,22 @@ const Inventory = () => {
   const [selectedItem, setSelectedItem] = useState({
 
   });
-  const handleItemClick = (item) => {
-    setSelectedItem(item);
+  const handleItemClick = async (item, slot) => {
+    console.log(item._id, slot)
+    const token = Auth.loggedIn() ? Auth.getToken() : null;
+    if (!token) {
+      return false;
+    }
+    try {
+      var action = 'equip';
+      const { data } = await equipItem({
+        variables: { itemId: item._id, action: action, slot: slot},
+      });
+
+    } catch (err) {
+      console.error(JSON.parse(JSON.stringify(err)));
+    }
+    // setSelectedItem(item);
   };
   // const [userInfo, setUserInfo] = useState({});
 console.log(data)
@@ -58,22 +75,22 @@ console.log(data)
 
   const callKey = (key) => {
     if (key === "weapon") {
-      return (`Weapon: ${inventory.weapon.name}`)
+      return (`${inventory.weapon.icon} ${inventory.weapon.name}`)
     }
     else if (key === "armor") {
-      return (`Armor: ${inventory.armor.name}`)
+      return (`${inventory.armor.icon} ${inventory.armor.name}`)
     }
     else if (key === "slot1") {
-      return (`Slot1: ${inventory.slot1.name}`)
+      return (`${inventory.slot1.icon} ${inventory.slot1.name}`)
     }
     else if (key === "slot2") {
-      return (`Slot2: ${inventory.slot2.name}`)
+      return (`${inventory.slot1.icon} ${inventory.slot2.name}`)
     }
     else if (key === "slot3") {
-      return (`Slot3: ${inventory.slot3.name}`)
+      return (`${inventory.slot1.icon} ${inventory.slot3.name}`)
     }
     else if (key === "slot4") {
-      return (`Slot4: ${inventory.slot4.name}`)
+      return (`${inventory.slot1.icon} ${inventory.slot4.name}`)
     }
   }
 
@@ -95,14 +112,21 @@ console.log(data)
                 <div className="dropdown-content">
                   {inventory.bag.map((item, i) => {
                     if (inventory.bag[i].itemtype === key) {
+                      console.log(key);
                       return (
-                        <a href="#" className="dropdown-item" key={item.name} onClick={() => handleItemClick(item)}>
+                        <button className="dropdown-item" key={`${item.name}-${key}`} onClick={() => handleItemClick(item, key)}>
                           {item.icon}  {item.name}
-                        </a>
+                        </button>
+                      );
+                    } else if (inventory.bag[i].itemtype === 'trinket' && (key === 'slot1' || key === 'slot2' || key === 'slot3' || key === 'slot4')){
+                      return (
+                        <button className="dropdown-item" key={`${item.name}-${key}`} onClick={() => handleItemClick(item, key)}>
+                          {item.icon}  {item.name}
+                        </button>
                       );
                     } else {
                       return null;
-                    }
+                    };
                   })}
                 </div>
               </div>

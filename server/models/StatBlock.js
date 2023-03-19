@@ -30,7 +30,7 @@ const statSchema = new Schema({
         default: 0
     },
     parry: {
-        type: Boolean,
+        type: Number,
         required: true,
         default: 0
     }

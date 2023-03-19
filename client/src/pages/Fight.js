@@ -1,69 +1,81 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import ListGroup from 'react-bootstrap/ListGroup';
+import Badge from 'react-bootstrap/Badge';
+import Button from 'react-bootstrap/Button';
 import { useMutation, useQuery } from "@apollo/client";
-import { LOGIN } from "../utils/gql/mutations";
-import { QUERY_ME } from "../utils/gql/queries";
-var health = Math.floor(45/60);
-var messageBody = document.querySelector('.scroll');
-// messageBody.scrollTop = messageBody.scrollHeight - messageBody.clientHeight;
+import { QUERY_CHARACTERS } from "../utils/gql/queries";
+import {UPDATE_INVENTORY } from '../utils/gql/mutations';
+import Auth from '../utils/Auth';
 
-const Fight = (props) => {
-    const { loading, data, error } = useQuery(QUERY_ME);
-    console.log(data);
+
+
+
+function Fight() {
+    var itemData;
+    const { loading, data: data1, error} = useQuery(QUERY_CHARACTERS);
+    const [purchaseItem, { error: purchaseError, data: purchaseData }] = useMutation(UPDATE_INVENTORY);
+    var data2;
+    data1? itemData = data1.characters : data2 = loading;
+    console.log(data2);
+    console.log(itemData);
+    // const itemData = JSON.stringify(shopData.shop)
+    
+
+    const handlePurchase = async (item) => {
+        console.log(item);
+        const token = Auth.loggedIn() ? Auth.getToken() : null;
+        if (!token) {
+          return false;
+        }
+        try {
+            // var action = 'buy';
+            // const { data } = await purchaseItem({
+            //    variables: { itemId: item, action: action },
+            //  });
+        
+        } catch (err) {
+          console.error(JSON.parse(JSON.stringify(err)));
+        }
+      };
+
     return (
         <>
-            <div className="tile is-ancestor">
-                <div className="tile is-vertical is-12">
-                    <div className="tile">
-                        <div className="tile is-parent">
-                            <div className="has-text-left tile is-child box">
-                                <div className="is-inline health-display">
-                                    ❤️<progress id="health" value="40" max="100"></progress> (60)
-                                </div>
-                                <p className="title">One</p>
-                                <p className="subtitle">Subtitle</p>
-                            </div>
-                        </div>
-                        <div className="tile is-parent">
-                            <article className="has-text-right tile is-child box">
-                            <div className="is-inline health-display">
-                                    (60)<progress id="health" value="40" max="100"></progress>❤️
-                                </div>
-                                <p className="title">Two</p>
-                                <p className="subtitle">Subtitle</p>
-                            </article>
-                        </div>
-                    </div>
-                    <div className="tile is-parent">
-                        <article className=" box panel-Body scroll">
-                            <p className="title">Three</p>
-                            <p className="subtitle">Subtitle</p>
-                        </article>
-                    </div>
-                </div>                
-            </div>
-            <div className="tile is-ancestor">
-                <div className="tile is-parent is-3">
-                    <article className="has-text-centered tile is-child box">
-                        <p className="title">🎲🗡️ (20)</p>
-                        <p className="subtitle">Subtitle</p>
-                    </article>
-                </div>
-                <div className="tile is-parent is-6">
-                    <article className="has-text-centered tile is-child box">
-                        <p className="title">Seven</p>
-                        <p className="subtitle">Subtitle</p>
-                    </article>
-                </div>
-                <div className="tile is-parent is-3">
-                    <article className="has-text-centered tile is-child box">
-                        <p className="title">🎲🛡️ (12)</p>
-                        <p className="subtitle">Subtitle</p>
-                    </article>
-                </div>
-            </div>
-        </>
-    );
-}
-
-export default Fight;
+                {loading ? (
+        <div>Loading...</div>
+      ) : ( itemData.map((item) => (
+                    <ListGroup key={item.name} className="section field label box has-text-centered" style={{ border: '4px solid rgba(1, 1, 1, 1)', borderRadius: '40px', fontSize: '33px', padding:'25px'}}>
+                        <ListGroup.Item>
+                            <Badge className='is-pulled-left' style={{ display: 'inline-block', fontSize: '33px', borderRadius: '60px', boxShadow: ' 0 0 8px #999', padding: '0.5em 0.6em', margin:'0px' }}>{item.rating}</Badge>
+                             {item.name} 
+                             <Button className='is-pulled-right' onClick={() => handlePurchase(item.name)} style={{ backgroundColor: 'orange', borderRadius: '40px', padding: '10px', paddingTop: '3px', paddingLeft:'20px', position: 'right', right: '160px', alignItems: 'center', width: 'fit-content', display: 'initial', fontSize: '33px' }} >FIGHT</Button></ListGroup.Item>
+                             
+                        
+                        <ListGroup.Item className='is-size-5'>{item.wins}</ListGroup.Item>
+                        <ListGroup.Item className='tag is-medium is-info is-pulled-right'>{item.deaths}</ListGroup.Item>
+                        
+                    </ListGroup>
+                )))
+            }
+            </>
+        );
+    }
+    
+    
+    export default Fight;
+    
+    
+    // Having trouble accessing the amount of gold the character has 
+    
+    // import { useState } from 'react';
+    // const [inventory, setInventory] = useState([]);
+    
+    // const addToInventory = (item) => {
+        //     setInventory([...inventory, item]);
+        // const charGold = require('../../../server/models/Character')
+// onClick={() => {
+//     if (item.price > charGold.gold) {
+//         alert('You cannot afford that item!')
+//     } else {
+//         addToInventory(item);
+//         alert('Item added successfully to you inventory')
+//     }
+// }}
