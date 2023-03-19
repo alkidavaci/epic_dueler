@@ -4,6 +4,7 @@ import Button from 'react-bootstrap/Button';
 import { useMutation, useQuery } from "@apollo/client";
 import { QUERY_CHARACTERS } from "../utils/gql/queries";
 import {UPDATE_INVENTORY } from '../utils/gql/mutations';
+import { useNavigate } from "react-router-dom";
 import Auth from '../utils/Auth';
 
 
@@ -18,23 +19,18 @@ function Fight() {
     console.log(data2);
     console.log(itemData);
     // const itemData = JSON.stringify(shopData.shop)
-    
+    let navigate = useNavigate();
+        const routeChange = () =>{  
+         let path = `/Battle`; 
+          navigate(path);
+    }
 
-    const handlePurchase = async (item) => {
+    const handleFight = async (item) => {
         console.log(item);
-        const token = Auth.loggedIn() ? Auth.getToken() : null;
-        if (!token) {
-          return false;
-        }
-        try {
-            // var action = 'buy';
-            // const { data } = await purchaseItem({
-            //    variables: { itemId: item, action: action },
-            //  });
+        localStorage.setItem('current_opponent', JSON.stringify(item));
+        routeChange();
+
         
-        } catch (err) {
-          console.error(JSON.parse(JSON.stringify(err)));
-        }
       };
 
     return (
@@ -46,7 +42,7 @@ function Fight() {
                         <ListGroup.Item>
                             <Badge className='is-pulled-left' style={{ display: 'inline-block', fontSize: '33px', borderRadius: '60px', boxShadow: ' 0 0 8px #999', padding: '0.5em 0.6em', margin:'0px' }}>{item.rating}</Badge>
                              {item.name} 
-                             <Button className='is-pulled-right' onClick={() => handlePurchase(item.name)} style={{ backgroundColor: 'orange', borderRadius: '40px', padding: '10px', paddingTop: '3px', paddingLeft:'20px', position: 'right', right: '160px', alignItems: 'center', width: 'fit-content', display: 'initial', fontSize: '33px' }} >FIGHT</Button></ListGroup.Item>
+                             <Button className='is-pulled-right' onClick={() => handleFight(item.name)} style={{ backgroundColor: 'orange', borderRadius: '40px', padding: '10px', paddingTop: '3px', paddingLeft:'20px', position: 'right', right: '160px', alignItems: 'center', width: 'fit-content', display: 'initial', fontSize: '33px' }} >FIGHT</Button></ListGroup.Item>
                              
                         
                         <ListGroup.Item className='is-size-5'>{item.wins}</ListGroup.Item>
