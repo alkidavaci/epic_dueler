@@ -84,13 +84,13 @@ console.log(data)
       return (`${inventory.slot1.icon} ${inventory.slot1.name}`)
     }
     else if (key === "slot2") {
-      return (`${inventory.slot1.icon} ${inventory.slot2.name}`)
+      return (`${inventory.slot2.icon} ${inventory.slot2.name}`)
     }
     else if (key === "slot3") {
-      return (`${inventory.slot1.icon} ${inventory.slot3.name}`)
+      return (`${inventory.slot3.icon} ${inventory.slot3.name}`)
     }
     else if (key === "slot4") {
-      return (`${inventory.slot1.icon} ${inventory.slot4.name}`)
+      return (`${inventory.slot4.icon} ${inventory.slot4.name}`)
     }
   }
 
