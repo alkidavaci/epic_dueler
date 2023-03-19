@@ -5,11 +5,12 @@ import { useMutation, useQuery } from "@apollo/client";
 import { QUERY_ME } from "../../utils/gql/queries";
 import { UPDATE_INVENTORY } from '../../utils/gql/mutations';
 import Auth from '../../utils/Auth';
-var itemData;
+
 
 
 
 const InventoryList = ({ data }) => {
+  var itemData;
   const { loading, data: data1, error } = useQuery(QUERY_ME);
   const [sellItem, { error: purchaseError, data: purchaseData }] = useMutation(UPDATE_INVENTORY);
   var data2;
