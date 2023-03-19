@@ -34,7 +34,8 @@ const resolvers = {
             }
         },
 
-        shop: async () => {
+        shop: async (_, __, context) => {
+
             return Item.find({ name: { $ne: 'empty' }});
         },
 
@@ -93,15 +94,17 @@ const resolvers = {
 
         //Update Inv( characterId, statblockId, inventoryId, itemId, action, slot) 
         //action = equip/sell/buy
-        updateInventory: async (parent, { characterId, statblockId, inventoryId, itemId, action, slot }) => {
-            // var cost = 0;
-            // var ratingChange = 0;
-            // const emptyItem = await Item.findOne({ name: "empty" });
-            // const inventory = await Inventory.findOne({ _id: inventoryId });
-            // const newItem = await Item.findOne({ _id: itemId });
-            // var newItemStat;
-            // var oldItem;  // the item in slot
-            // var oldStat; // possible array of stat values on the old item
+        updateInventory: async (parent, {itemId, action, slot }, context) => {
+            var cost = 0;
+            var ratingChange = 0;
+            const characterData = await Character.findOne({ name: context.account.username });
+            
+            const emptyItem = await Item.findOne({ name: "empty" });
+            const inventory = await Inventory.findOne({ _id: characterData.inventory });
+            const newItem = await Item.findOne({ _id: itemId });
+            var newItemStat;
+            var oldItem;  // the item in slot
+            var oldStat; // possible array of stat values on the old item
             if (slot) {
                 switch (slot) {
                     case 'weapon':
@@ -136,7 +139,7 @@ const resolvers = {
                             ratingChange -= change;
                         }
                         await StatBlock.findOneAndUpdate(
-                            { _id: statblockId },
+                            { _id: characterData.statblock },
                             { $inc: { [`${stat[0]}`]: change } }
                         );
                     }
@@ -157,72 +160,69 @@ const resolvers = {
                                 ratingChange += change;
                             }
                             await StatBlock.findOneAndUpdate(
-                                { _id: statblockId },
+                                { _id: characterData.statblock },
                                 { $inc: { [`${stat[0]}`]: change } }
                             );
                         }
                         await Inventory.findOneAndUpdate(
-                            { _id: inventoryId },
+                            { _id: characterData.inventory },
                             { $addToSet: { bag: { _id: oldItem._id } }, $set: { [`${slot}`]: itemId } },
                             { new: true }
                         );
                     } else if (oldItem._id != newItem._id) {
                         await Inventory.findOneAndUpdate(
-                            { _id: inventoryId },
+                            { _id: characterData.inventory },
                             { $set: { [`${slot}`]: itemId } }
                         );
                     }
-                    var char = await Character.findOneAndUpdate(
-                        { _id: characterId },
+                    return await Character.findOneAndUpdate(
+                        { name: context.account.username },
                         { $inc: { rating: ratingChange } },
                         { new: true }
                     ).populate("inventory")
                     .populate("statblock")
                     .populate([{ path: 'inventory', populate: [{ path: 'weapon' }, { path: 'armor' }, { path: 'slot1' }, { path: 'slot2' }, { path: 'slot3' }, { path: 'slot4' }, { path: 'bag' }] }]).exec();
 
-                    return { char };
-
-
                 case 'sell':
                     //findOne itemId
+                    
                     const sellItem = await Item.findOne({ _id: itemId });
                     cost = Math.floor(sellItem.price / 2);
                     //inventory findoneandupdate $pull itemId from bag
                     const reducedInventory = await Inventory.findOneAndUpdate(
-                        { _id: inventoryId },
+                        { _id: characterData.inventory },
                         { $pull: { bag: { _id: itemId } } },
                         { new: true }
                     );
                     //findoneandupdate chatacterId >  $inc: {gold:cost}
-                    var char = await Character.findOneAndUpdate(
-                        { _id: characterId },
+                    return await Character.findOneAndUpdate(
+                        { name: context.account.username },
                         { $inc: { gold: cost } },
                         { new: true }
-                    ).populate('inventory').populate('statblock');
+                    ).populate('inventory').populate('statblock').populate([{ path: 'inventory', populate: [{ path: 'weapon' }, { path: 'armor' }, { path: 'slot1' }, { path: 'slot2' }, { path: 'slot3' }, { path: 'slot4' }, { path: 'bag' }] }]).exec();;
 
-                    return { char, reducedInventory };
                 case 'buy':
                     //findOne itemId
+                    
                     const buyItem = await Item.findOne({ _id: itemId });
                     cost -= buyItem.price;
                     //inventory findoneandupdate $pull itemId from bag
                     await Inventory.findOneAndUpdate(
-                        { _id: inventoryId },
+                        { _id: characterData.inventory },
                         { $addToSet: { bag: { _id: itemId } } },
                         { new: true }
                     );
                     //findoneandupdate chatacterId >  $inc: {gold:cost}
-                    var char = await Character.findOneAndUpdate(
-                        { _id: characterId },
+                    return await Character.findOneAndUpdate(
+                        { _id: characterData._id },
                         { $inc: { gold: cost } },
                         { new: true }
                     ).populate("inventory")
                     .populate("statblock")
                     .populate([{ path: 'inventory', populate: [{ path: 'weapon' }, { path: 'armor' }, { path: 'slot1' }, { path: 'slot2' }, { path: 'slot3' }, { path: 'slot4' }, { path: 'bag' }] }]).exec();
-
-                    return { char };
+                    // return { char2 };
                 default:
-                    throw new Error("Action Not Possible!");
+                    // throw new Error("Action Not Possible!");
             }
 
         },

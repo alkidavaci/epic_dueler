@@ -16,7 +16,7 @@ import { InventoryList } from "../components";
 const Inventory = () => {
   const { loading, data, error } = useQuery(QUERY_ME);
   const inventory = data?.me?.inventory || [];
-  console.log(inventory.weapon)
+  console.log(inventory)
   
   // Dropdown active onclick
   const [activeDropdown, setActiveDropdown] = useState(null);
@@ -48,11 +48,11 @@ const Inventory = () => {
           </div>
           <div className="dropdown-menu" id="dropdown-menu" role="menu">
             <div className="dropdown-content">
-              {inventory[key].map((item) => (
+              {/* {inventory[key].map((item) => (
                 <a href="#" className="dropdown-item" key={item._id}>
                   <img src={item.icon} alt={item.name} width="32" height="32" /> {item.name}
                 </a>
-              ))}
+              ))} */}
             </div>
           </div>
         </div>

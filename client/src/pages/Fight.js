@@ -8,7 +8,8 @@ var messageBody = document.querySelector('.scroll');
 // messageBody.scrollTop = messageBody.scrollHeight - messageBody.clientHeight;
 
 const Fight = (props) => {
-    console.log(props);
+    const { loading, data, error } = useQuery(QUERY_ME);
+    console.log(data);
     return (
         <>
             <div className="tile is-ancestor">
