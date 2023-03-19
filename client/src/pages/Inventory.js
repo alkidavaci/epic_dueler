@@ -31,6 +31,21 @@ const Inventory = () => {
   const handleItemClick = (item) => {
     setSelectedItem(item);
   };
+  // const [userInfo, setUserInfo] = useState({});
+console.log(data)
+// Handle user info
+// const newUserInfo = {
+//   name: data.me.name,
+//   gold: data.me.gold,
+//   wins: data.me.wins,
+//   deaths: data.me.deaths,
+// };
+
+// setUserInfo(newUserInfo);
+
+// console.log({userInfo});
+  // setUserCharacter(data.me);
+
   // loading and errors
   if (loading) {
     return <div>Loading...</div>;
@@ -96,8 +111,17 @@ const Inventory = () => {
         }
         return null;
       })}
-      <UserCharacter Item = {selectedItem}  />
-      {/* <div><InventoryList inventory={inventory} /></div> */}
+      <div className="columns">
+
+      <div className="column is-three-fifths">
+        {/* <InventoryList data={data} /> */}
+      </div>
+
+      <div className="column is-two-fifths">
+        <UserCharacter data={data} />
+      </div>
+      
+      </div>
     </div>
   );
 }
