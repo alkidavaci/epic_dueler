@@ -15,7 +15,9 @@ function Header() {
     if (Auth.loggedIn()) {
       // Get the user's username from the decoded token
       const profile = Auth.getProfile();
-      setUsername(profile.username);
+      // Uppercase first letter of username
+      const userName = profile.data.username.slice(0, 1).toUpperCase() + profile.data.username.slice(1)
+      setUsername(userName);
       setIsLoggedIn(true);
     }
   }, []);
