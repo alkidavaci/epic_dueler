@@ -6,9 +6,6 @@ import Auth from "../utils/Auth";
 import { useNavigate } from "react-router-dom";
 
 
-// import Inventory from '../pages/Inventory';
-
-
 const Login = (props) => {
   const [formState, setFormState] = useState({ username: "", password: "" });
   const [login, { error, data }] = useMutation(LOGIN);
@@ -22,12 +19,14 @@ const Login = (props) => {
       [name]: value,
     });
   };
-
+  
+  // Navigate to Inventory page 
   let navigate = useNavigate();
-  const routeChange = () =>{  
-   let path = `/Inventory`; 
+  const routeChange = () => {
+    let path = `/Inventory`;
     navigate(path);
-}
+  }
+
   // Submit form
   const handleFormSubmit = async (event) => {
     event.preventDefault();
@@ -39,6 +38,7 @@ const Login = (props) => {
       console.log({ data });
       Auth.login(data.login.token);
 
+      // Change route to Inventory on click
       routeChange();
     } catch (e) {
       console.error(JSON.parse(JSON.stringify(e)));
@@ -49,8 +49,6 @@ const Login = (props) => {
       username: "",
       password: "",
     });
-
-
   };
 
   return (
@@ -92,7 +90,6 @@ const Login = (props) => {
                       className="button is-info"
                       style={{ cursor: "pointer" }}
                       type="submit"
-                      
                     >
                       Submit
                     </button>
@@ -105,8 +102,6 @@ const Login = (props) => {
             </form>
           </div>
         </div> </section>
-   
-
     </>
   );
 };
