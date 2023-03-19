@@ -83,7 +83,7 @@ const Inventory = () => {
       }
       return null; 
     })}
-    {/* <div><InventoryList inventory={inventory} /></div> */}
+    <div><InventoryList inventory={inventory} /></div>
   </div>
   );
 }

@@ -37,11 +37,11 @@ const resolvers = {
 
         shop: async (_, __, context) => {
 
-            return Item.find({ name: { $ne: 'empty' }});
+            return Item.find({ name: { $ne: 'empty' } });
         },
 
         characters: async (parent, args, context) => {
-            return Character.find({ name: { $ne: context.account.username }});
+            return Character.find({ name: { $ne: context.account.username } });
         },
 
     },
@@ -95,12 +95,11 @@ const resolvers = {
 
         //Update Inv( characterId, statblockId, inventoryId, itemId, action, slot) 
         //action = equip/sell/buy
-
-        updateInventory: async (parent, {itemId, action, slot }, context) => {
+        updateInventory: async (parent, { itemId, action, slot }, context) => {
             var cost = 0;
             var ratingChange = 0;
             const characterData = await Character.findOne({ name: context.account.username });
-            
+
             const emptyItem = await Item.findOne({ name: "empty" });
             const inventory = await Inventory.findOne({ _id: characterData.inventory });
             const newItem = await Item.findOne({ _id: itemId });
@@ -168,13 +167,13 @@ const resolvers = {
                         }
                         await Inventory.findOneAndUpdate(
                             { _id: characterData.inventory },
-                            { $addToSet: { bag: { _id: oldItem._id } }, $set: { [`${slot}`]: itemId } },
+                            { $addToSet: { bag: { _id: oldItem._id } }, $set: { [`${slot}`]: itemId }, $pullAll: { bag: [ itemId ] } },
                             { new: true }
                         );
                     } else if (oldItem._id != newItem._id) {
                         await Inventory.findOneAndUpdate(
                             { _id: characterData.inventory },
-                            { $set: { [`${slot}`]: itemId } }
+                            { $set: { [`${slot}`]: itemId }, $addToSet: { bag: { _id: oldItem._id } } }
                         );
                     }
                     return await Character.findOneAndUpdate(
@@ -182,18 +181,18 @@ const resolvers = {
                         { $inc: { rating: ratingChange } },
                         { new: true }
                     ).populate("inventory")
-                    .populate("statblock")
-                    .populate([{ path: 'inventory', populate: [{ path: 'weapon' }, { path: 'armor' }, { path: 'slot1' }, { path: 'slot2' }, { path: 'slot3' }, { path: 'slot4' }, { path: 'bag' }] }]).exec();
+                        .populate("statblock")
+                        .populate([{ path: 'inventory', populate: [{ path: 'weapon' }, { path: 'armor' }, { path: 'slot1' }, { path: 'slot2' }, { path: 'slot3' }, { path: 'slot4' }, { path: 'bag' }] }]).exec();
 
                 case 'sell':
                     //findOne itemId
-                    
+
                     const sellItem = await Item.findOne({ _id: itemId });
                     cost = Math.floor(sellItem.price / 2);
                     //inventory findoneandupdate $pull itemId from bag
-                    const reducedInventory = await Inventory.findOneAndUpdate(
+                    await Inventory.findOneAndUpdate(
                         { _id: characterData.inventory },
-                        { $pull: { bag: { _id: itemId } } },
+                        { $pullAll: { bag: [ itemId ] } },
                         { new: true }
                     );
                     //findoneandupdate chatacterId >  $inc: {gold:cost}
@@ -205,7 +204,7 @@ const resolvers = {
 
                 case 'buy':
                     //findOne itemId
-                    
+
                     const buyItem = await Item.findOne({ _id: itemId });
                     cost -= buyItem.price;
                     //inventory findoneandupdate $pull itemId from bag
@@ -220,11 +219,11 @@ const resolvers = {
                         { $inc: { gold: cost } },
                         { new: true }
                     ).populate("inventory")
-                    .populate("statblock")
-                    .populate([{ path: 'inventory', populate: [{ path: 'weapon' }, { path: 'armor' }, { path: 'slot1' }, { path: 'slot2' }, { path: 'slot3' }, { path: 'slot4' }, { path: 'bag' }] }]).exec();
-                    // return { char2 };
+                        .populate("statblock")
+                        .populate([{ path: 'inventory', populate: [{ path: 'weapon' }, { path: 'armor' }, { path: 'slot1' }, { path: 'slot2' }, { path: 'slot3' }, { path: 'slot4' }, { path: 'bag' }] }]).exec();
+                // return { char2 };
                 default:
-                    // throw new Error("Action Not Possible!");
+                // throw new Error("Action Not Possible!");
             }
 
         },
@@ -238,8 +237,8 @@ const resolvers = {
                     { $inc: { [`wins`]: 1 }, $inc: { [`gold`]: gain } },
                     { new: true }
                 ).populate("inventory")
-                .populate("statblock")
-                .populate([{ path: 'inventory', populate: [{ path: 'weapon' }, { path: 'armor' }, { path: 'slot1' }, { path: 'slot2' }, { path: 'slot3' }, { path: 'slot4' }, { path: 'bag' }] }]).exec();
+                    .populate("statblock")
+                    .populate([{ path: 'inventory', populate: [{ path: 'weapon' }, { path: 'armor' }, { path: 'slot1' }, { path: 'slot2' }, { path: 'slot3' }, { path: 'slot4' }, { path: 'bag' }] }]).exec();
 
             } else {
                 const resTax = -(Math.floor(gain / 2));
@@ -248,8 +247,8 @@ const resolvers = {
                     { $inc: { [`deaths`]: 1 }, $inc: { [`gold`]: resTax } },
                     { new: true }
                 ).populate("inventory")
-                .populate("statblock")
-                .populate([{ path: 'inventory', populate: [{ path: 'weapon' }, { path: 'armor' }, { path: 'slot1' }, { path: 'slot2' }, { path: 'slot3' }, { path: 'slot4' }, { path: 'bag' }] }]).exec();
+                    .populate("statblock")
+                    .populate([{ path: 'inventory', populate: [{ path: 'weapon' }, { path: 'armor' }, { path: 'slot1' }, { path: 'slot2' }, { path: 'slot3' }, { path: 'slot4' }, { path: 'bag' }] }]).exec();
             };
 
             return { char };
