@@ -88,14 +88,79 @@ export const QUERY_ME = gql`
 `;
 
 export const QUERY_OPPONENT = gql`
-  query opponent {
-    opponent {
+  query opponent($name: String!) {
+    opponent(name: $name) {
       _id
         name
         gold
         wins
         deaths
         rating
+        inventory {
+          weapon {
+            _id
+            name
+            icon
+            itemtype
+            price
+            value
+            description
+          }
+          armor {
+            _id
+            name
+            icon
+            itemtype
+            price
+            value
+            description
+          }
+          slot1 {
+            _id
+            name
+            icon
+            itemtype
+            price
+            value
+            description
+          }
+          slot2 {
+            _id
+            name
+            icon
+            itemtype
+            price
+            value
+            description
+          }
+          slot3 {
+            _id
+            name
+            icon
+            itemtype
+            price
+            value
+            description
+          }
+          slot4 {
+            _id
+            name
+            icon
+            itemtype
+            price
+            value
+            description
+          }
+          bag {
+            _id
+            name
+            icon
+            itemtype
+            price
+            value
+            description
+          }
+        }
         statblock {
           hp
           range
@@ -103,7 +168,7 @@ export const QUERY_OPPONENT = gql`
           defense
           crit
           parry
-        } 
+        }
     }
   }
 `;
