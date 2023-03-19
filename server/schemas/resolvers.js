@@ -37,7 +37,7 @@ const resolvers = {
 
         shop: async (_, __, context) => {
 
-            return Item.find({ name: { $ne: 'empty' } });
+            return Item.find({ name: { $ne: 'None' } });
         },
 
         characters: async (parent, args, context) => {
@@ -75,7 +75,7 @@ const resolvers = {
 
         addCharacter: async (parent, { name }) => {
 
-            const emptyItem = await Item.findOne({ name: "empty" });
+            const emptyItem = await Item.findOne({ name: "None" });
             const inventory = await Inventory.create({ weapon: emptyItem._id, armor: emptyItem._id, slot1: emptyItem._id, slot2: emptyItem._id, slot3: emptyItem._id, slot4: emptyItem._id });
             const statblock = await StatBlock.create({});
             const character = await Character.create({ name: name, inventory: inventory._id, statblock: statblock._id });
@@ -96,13 +96,15 @@ const resolvers = {
         //Update Inv( characterId, statblockId, inventoryId, itemId, action, slot) 
         //action = equip/sell/buy
         updateInventory: async (parent, { itemId, action, slot }, context) => {
+            const emptyItem = await Item.findOne({ name: "None" });
+            const newItem = await Item.findOne({ _id: itemId });
             var cost = 0;
             var ratingChange = 0;
-            const characterData = await Character.findOne({ name: context.account.username });
-
-            const emptyItem = await Item.findOne({ name: "empty" });
+            const characterData = await Character.findOne({ name: context.account.username });            
+            
             const inventory = await Inventory.findOne({ _id: characterData.inventory });
-            const newItem = await Item.findOne({ _id: itemId });
+           
+
             var newItemStat;
             var oldItem;  // the item in slot
             var oldStat; // possible array of stat values on the old item
@@ -127,18 +129,20 @@ const resolvers = {
                         oldItem = await Item.findOne({ _id: inventory.slot4 });
                         break;
                 }
-                if (oldItem._id != emptyItem._id && oldItem._id != newItem._id) {
+                
+                if (oldItem.name != 'None' && oldItem._id != newItem._id) {
                     oldStat = oldItem.value.split(',');
                     for (let i = 0; i < oldStat.length; i++) {
                         var stat = oldStat[i].split('.');
-                        let change = -(parseInt(stat[1]));
+                        let change = -parseInt(stat[1]);
                         if (stat[0] === 'range') {
-                            ratingChange -= (change / 2);
+                            ratingChange += (change / 2);
                         } else if (stat[0] === 'hp') {
-                            ratingChange -= (change / 12);
+                            ratingChange += (change / 12);
                         } else {
-                            ratingChange -= change;
+                            ratingChange += change;
                         }
+                        console.log("dec", stat[0], change, ratingChange);
                         await StatBlock.findOneAndUpdate(
                             { _id: characterData.statblock },
                             { $inc: { [`${stat[0]}`]: change } }
@@ -148,37 +152,43 @@ const resolvers = {
             };
             switch (action) {
                 case 'equip':
+                    //when there is an new item and not equipping the same item
+                    //add update stats
                     if (newItem._id != emptyItem._id && oldItem._id != newItem._id) {
                         newItemStat = newItem.value.split(',');
-                        for (let i = 0; i < newItemStat.length; i++) {
-                            var stat = newItemStat[i].split('.');
-                            let change = parseInt(stat[1]);
+                        for (let j = 0; j < newItemStat.length; j++) {
+                            var stat = newItemStat[j].split('.');
+                            let changeAdd = parseInt(stat[1]);
                             if (stat[0] === 'range') {
-                                ratingChange += (change / 2);
+                                ratingChange += (changeAdd / 2);
                             } else if (stat[0] === 'hp') {
-                                ratingChange += (change / 12);
+                                ratingChange += (changeAdd / 12);
                             } else {
-                                ratingChange += change;
+                                ratingChange += changeAdd;
                             }
-                            await StatBlock.findOneAndUpdate(
-                                { _id: characterData.statblock },
-                                { $inc: { [`${stat[0]}`]: change } }
-                            );
-                        }
+                            console.log('inc', stat[0], changeAdd, ratingChange);
+                                await StatBlock.findOneAndUpdate(
+                                    { _id: characterData.statblock },
+                                    { $inc: { [`${stat[0]}`]: changeAdd } }
+                                );                            
+                        };                        
                         await Inventory.findOneAndUpdate(
                             { _id: characterData.inventory },
-                            { $addToSet: { bag: { _id: oldItem._id } }, $set: { [`${slot}`]: itemId }, $pullAll: { bag: [ itemId ] } },
+                            { $set: { [`${slot}`]: itemId } },
                             { new: true }
                         );
-                    } else if (oldItem._id != newItem._id) {
+                    } else if (newItem._id === emptyItem._id) {
                         await Inventory.findOneAndUpdate(
                             { _id: characterData.inventory },
-                            { $set: { [`${slot}`]: itemId }, $addToSet: { bag: { _id: oldItem._id } } }
+                            { $set: { [`${slot}`]: emptyItem._id } },
+                            { new: true }
                         );
-                    }
+                    };
+
+                    console.log(ratingChange);
                     return await Character.findOneAndUpdate(
                         { name: context.account.username },
-                        { $inc: { rating: ratingChange } },
+                        { $inc: { rating: parseInt(ratingChange) } },
                         { new: true }
                     ).populate("inventory")
                         .populate("statblock")
@@ -192,7 +202,7 @@ const resolvers = {
                     //inventory findoneandupdate $pull itemId from bag
                     await Inventory.findOneAndUpdate(
                         { _id: characterData.inventory },
-                        { $pullAll: { bag: [ itemId ] } },
+                        { $pullAll: { bag: [itemId] } },
                         { new: true }
                     );
                     //findoneandupdate chatacterId >  $inc: {gold:cost}

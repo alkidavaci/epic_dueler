@@ -1,7 +1,7 @@
 [
     {
-        "name": "empty",
-        "icon": "",
+        "name": "None",
+        "icon": "🚫",
         "itemtype": "none",
         "price": 0,
         "value": "none",
@@ -84,7 +84,7 @@
         "icon": "🔨",
         "itemtype": "weapon",
         "price": 300,
-        "value": "range.5,attack.3",
+        "value": "range.4,attack.4",
         "description": "A reliable hammer that is harder to block. Damage: 4-8"
     },
     {
