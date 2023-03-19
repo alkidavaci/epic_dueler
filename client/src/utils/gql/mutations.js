@@ -37,9 +37,8 @@ mutation addCharacter($name: String!) {
 `;
 
 export const UPDATE_INVENTORY = gql`
-mutation updateInventory($characterId: ID!, $inventoryId: ID!, $itemId: ID!, $action: String!, $slot: String) {
-    updateInventory(characterId: $characterId, inventoryId: $inventoryId, itemId: $itemId, action: $action, slot: $slot) {
-
+mutation updateInventory($itemId: ID!, $action: String!, $slot: String) {
+    updateInventory(itemId: $itemId, action: $action, slot: $slot) {
         _id
         name
         gold

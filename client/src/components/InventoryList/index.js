@@ -20,7 +20,7 @@ const SellItem = ({ itemId, inventoryId, itemValue }) => {
 const InventoryList = ({ inventory }) => {
   return (
     <div className="item-container">
-      {inventory.map((item) => (
+      {/* {inventory.map((item) => (
         <ul>
           <li>
             <div className="item-icon">{item.icon}</div>
@@ -29,7 +29,7 @@ const InventoryList = ({ inventory }) => {
             <button onClick={() => SellItem(item._id, inventory._id, item.value)} className="btn item-btn">Sell</button>
           </li>
         </ul>
-      ))}
+      ))} */}
     </div>
   );
 };
