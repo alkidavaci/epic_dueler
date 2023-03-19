@@ -71,7 +71,7 @@ const typeDefs = gql`
     addAccount(username: String!, email: String!, password: String!): Auth
     addCharacter(name: String!): Account
     updateCharacter(name: String!, win: Boolean!, gain: Int!): Character
-    updateInventory(characterId: ID!, inventoryId: ID!, itemId: ID!, action: String!, slot: String): Character
+    updateInventory(itemId: ID!, action: String!, slot: String): Character
     removeCharacter(characterId: ID!): Character
     removeAccount(accountId: ID!): Account
 

@@ -20,6 +20,7 @@ const SellItem = ({ itemId, inventoryId, itemValue }) => {
 
 const InventoryList = ({ inventory }) => {
   return (
+
     <div className="item-container is-full columns">
 
       {inventory.map((item, index) => (
@@ -49,6 +50,7 @@ const InventoryList = ({ inventory }) => {
         Charactery
 
       </div>
+
     </div>
   );
 };

@@ -29,7 +29,7 @@
         "itemtype": "weapon",
         "price": 300,
         "value": "attack.3,defense.2",
-        "description": "Fight like Wyatt Russell. Damage: 4-7"
+        "description": "Sometimes defense is the best offense. Damage: 4-7"
     },
     {
         "name": "Spear",
@@ -85,7 +85,7 @@
         "itemtype": "weapon",
         "price": 300,
         "value": "range.5,attack.3",
-        "description": "A reliable hammer that is harder to block. Damage: 1-5 + 3"
+        "description": "A reliable hammer that is harder to block. Damage: 4-8"
     },
     {
         "name": "Cloth",
