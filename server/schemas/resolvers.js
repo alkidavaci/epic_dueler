@@ -34,6 +34,7 @@ const resolvers = {
             }
         },
 
+
         shop: async (_, __, context) => {
 
             return Item.find({ name: { $ne: 'empty' }});
