@@ -9,7 +9,7 @@ var itemData;
 
 
 
-const InventoryList = ({ inventory }) => {
+const InventoryList = ({ data }) => {
   const { loading, data: data1, error } = useQuery(QUERY_ME);
   const [sellItem, { error: purchaseError, data: purchaseData }] = useMutation(UPDATE_INVENTORY);
   var data2;

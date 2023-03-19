@@ -114,7 +114,7 @@ console.log(data)
       <div className="columns">
 
       <div className="column is-three-fifths">
-        {/* <InventoryList data={data} /> */}
+        <InventoryList data={data} />
       </div>
 
       <div className="column is-two-fifths">
