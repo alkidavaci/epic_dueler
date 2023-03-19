@@ -95,6 +95,7 @@ const resolvers = {
 
         //Update Inv( characterId, statblockId, inventoryId, itemId, action, slot) 
         //action = equip/sell/buy
+
         updateInventory: async (parent, {itemId, action, slot }, context) => {
             var cost = 0;
             var ratingChange = 0;
@@ -102,6 +103,7 @@ const resolvers = {
             
             const emptyItem = await Item.findOne({ name: "empty" });
             const inventory = await Inventory.findOne({ _id: characterData.inventory });
+
             const newItem = await Item.findOne({ _id: itemId });
             var newItemStat;
             var oldItem;  // the item in slot
