@@ -46,7 +46,7 @@ function Header() {
 
             <div>
               <Nav />
-              <Inventory />
+              {/* <Inventory /> */}
             </div>
           </div>
         )}
