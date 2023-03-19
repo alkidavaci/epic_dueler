@@ -3,7 +3,7 @@ import Badge from 'react-bootstrap/Badge';
 import Button from 'react-bootstrap/Button';
 import { useMutation, useQuery } from "@apollo/client";
 import { QUERY_SHOP } from "../utils/gql/queries";
-import { ADD_ACCOUNT, UPDATE_INVENTORY } from '../utils/gql/mutations';
+import {UPDATE_INVENTORY } from '../utils/gql/mutations';
 import Auth from '../utils/Auth';
 var itemData;
 
@@ -17,6 +17,8 @@ function Shop() {
     console.log(data2);
     console.log(itemData);
     // const itemData = JSON.stringify(shopData.shop)
+    
+
     const handlePurchase = async (item) => {
         console.log(item);
         const token = Auth.loggedIn() ? Auth.getToken() : null;
@@ -39,13 +41,16 @@ function Shop() {
                 {loading ? (
         <div>Loading...</div>
       ) : ( itemData.map((item) => (
-                    <ListGroup key={item.name} className="section field label" style={{ border: '5px solid rgba(1, 1, 1, 1)', borderRadius: '40px', fontSize: '25px', padding:'25px'}}>
+                    <ListGroup key={item.name} className="section field label box has-text-centered" style={{ border: '4px solid rgba(1, 1, 1, 1)', borderRadius: '40px', fontSize: '33px', padding:'25px'}}>
                         <ListGroup.Item>
-                            <Badge style={{ display: 'inline-block', borderRadius: '60px', boxShadow: ' 0 0 8px #999', padding: '0.5em 0.6em', margin:'10px' }}>{item.icon}</Badge>
-                             Weapon Name: {item.name} 
-                             <Button onClick={() => handlePurchase(item._id)} style={{ backgroundColor: 'orange', borderRadius: '40px', padding: '10px', paddingTop: '3px', paddingLeft:'20px', position: 'absolute', right: '160px', alignItems: 'center', width: 'fit-content', display: 'initial', fontSize: '33px' }} >{item.price}💎</Button></ListGroup.Item>
-                        <ListGroup.Item>Item Type: {item.itemtype}</ListGroup.Item>
-                        <ListGroup.Item>Description: {item.description}</ListGroup.Item>
+                            <Badge className='is-pulled-left' style={{ display: 'inline-block', fontSize: '33px', borderRadius: '60px', boxShadow: ' 0 0 8px #999', padding: '0.5em 0.6em', margin:'0px' }}>{item.icon}</Badge>
+                             {item.name} 
+                             <Button className='is-pulled-right' onClick={() => handlePurchase(item._id)} style={{ backgroundColor: 'orange', borderRadius: '40px', padding: '10px', paddingTop: '3px', paddingLeft:'20px', position: 'right', right: '160px', alignItems: 'center', width: 'fit-content', display: 'initial', fontSize: '33px' }} >{item.price}💎</Button></ListGroup.Item>
+                             
+                        
+                        <ListGroup.Item className='is-size-5'>{item.description}</ListGroup.Item>
+                        <ListGroup.Item className='tag is-medium is-info is-pulled-right'>{item.itemtype}</ListGroup.Item>
+                        
                     </ListGroup>
                 )))
             }
