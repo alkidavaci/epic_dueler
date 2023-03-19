@@ -103,7 +103,6 @@ const resolvers = {
             
             const emptyItem = await Item.findOne({ name: "empty" });
             const inventory = await Inventory.findOne({ _id: characterData.inventory });
-
             const newItem = await Item.findOne({ _id: itemId });
             var newItemStat;
             var oldItem;  // the item in slot

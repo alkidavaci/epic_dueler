@@ -50,7 +50,6 @@ const InventoryList = ({ inventory }) => {
         Charactery
 
       </div>
-
     </div>
   );
 };
