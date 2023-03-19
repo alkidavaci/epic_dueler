@@ -72,10 +72,10 @@ function App() {
                   path="/shop" 
                   element={<Shop />} 
                 />
-                   {/* <Route 
+                   <Route 
                   path="/battle" 
                   element={<Battle />} 
-                /> */}
+                />
                     {/* <Route 
                   path="*" 
                   element={<NotFound />} 
