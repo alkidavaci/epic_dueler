@@ -40,6 +40,8 @@ const Login = (props) => {
 
       // Change route to Inventory on click
       routeChange();
+      window.location.reload();
+
     } catch (e) {
       console.error(JSON.parse(JSON.stringify(e)));
     }

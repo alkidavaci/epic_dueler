@@ -1,6 +1,7 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { ADD_ACCOUNT, ADD_CHARACTER } from "../utils/gql/mutations";
 import { useMutation } from "@apollo/client";
+import Inventory from "../pages/Inventory";
 import Auth from "../utils/Auth";
 import { useNavigate } from "react-router-dom";
 
@@ -62,6 +63,8 @@ const Signup = () => {
 
       // Change route to Inventory on click
       routeChange();
+      window.location.reload();
+
     } catch (e) {
       console.error(JSON.parse(JSON.stringify(e)));
     }
@@ -129,6 +132,9 @@ const Signup = () => {
                   </div>
                 </div>
               </form>
+            {charError && (
+              <div className="notification is-danger">{charError.message}</div>
+            )}
           </div>
         </div>
       </div>
