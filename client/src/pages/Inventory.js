@@ -75,11 +75,12 @@ const Inventory = () => {
 
   return (
     <div>
+      <div className="is-flex is-justify-content-center is-align-content-center is-flex-wrap-wrap">
       {Object.keys(inventory).map((key, index) => {
         if (index > 0 && index < 7) {
           return (
-            <div className={`dropdown ${activeDropdown === key ? 'is-active' : ''}`} key={key._id}>
-              <div className="dropdown-trigger">
+            <div className={`dropdown ${activeDropdown === key ? 'is-active' : ''} `} key={key._id}>
+              <div className="dropdown-trigger ">
                 <button className="button" onClick={() => handleDropdownClick(key)}>
                   <span>{callKey(key)}</span>
                   <span className="icon is-small">
@@ -114,6 +115,7 @@ const Inventory = () => {
         }
         return null;
       })}
+      </div>
       <div className="columns m-6">
 
       <div className="column is-two-fifths">
