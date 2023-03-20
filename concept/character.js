@@ -1,4 +1,4 @@
-class Character {
+class Combatant {
   constructor(name, strength, hitpoints, atk, crit, def, parry) {
     this.name = name;
     this.strength = strength;
@@ -11,8 +11,8 @@ class Character {
   //items 1 statUnit = +12hp, +1 stat, +2 range 
   // 🛡️ ⚔️ 🩸 🎲 
   // 🥋🎽🥷👩‍🚀🧑‍🚒👷🦹🏼‍♀️⛑️🪖👑👒🤖💀💥
-//🔪🦯🗡️🪓⚔️🏏🦴🪄
-//🪙🧿📿🎀❤️💠🔱🎲🎖️🥇🥈🥉🥽👓💍
+  //🔪🦯🗡️🪓⚔️🏏🦴🪄
+  //🪙🧿📿🎀❤️💠🔱🎲🎖️🥇🥈🥉🥽👓💍
   printStats() {
     console.log(`❤️ (${this.hitpoints})  -(${this.name})-`);
   }
@@ -187,6 +187,8 @@ class Character {
     }
   }
 }
+
+module.exports = Combatant
 
 // Creates two unique characters using the "character" constructor
 // name, strength, hitpoints, atk, crit, def, parry   4, 60, 0, 0,0,0

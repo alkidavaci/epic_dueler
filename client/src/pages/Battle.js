@@ -5,111 +5,295 @@ import { LOGIN } from "../utils/gql/mutations";
 import { Container, Button } from 'react-bootstrap';
 import Badge from 'react-bootstrap/Badge';
 import { QUERY_ME, QUERY_OPPONENT } from "../utils/gql/queries";
-var health = Math.floor(45/60);
-var messageBody = document.querySelector('.scroll');
-// messageBody.scrollTop = messageBody.scrollHeight - messageBody.clientHeight;
+import Combatant from "../utils/combatant";
+var battleLoad = 0;
+var playerTurn = true;
+const playerLogCss = 'is-pulled-right log';
+const opponentLogCss = 'has-text-right log';
+const rollLogCss = 'tag is-info log is-large is-light';
+const attackLogCss = 'tag is-warning log is-large is-light';
+const moveLogCss = 'tag is-success log is-large is-light';
+var player1;
+var player2;
+var playerHp;
+var opponentHp;
+var nextAction;
+var hit;
+var defense;
+
 
 //interval turn(
-    // inverval modifierRoll(
-        //if nextroll is (initiative or hit) > clearinterval
-        //executeAction()
-             //modify actionDesc, nextRoll, Attacker, HP
-        //ifDead(clear))
-        //2 SEC
-    //ifDead(clear)
-    //performRoll (hit or init)
-        //actionDesc = describe roll (x attacks, Roll initaive)
+// inverval modifierRoll(
+//if nextroll is (initiative or hit) > clearinterval
+//executeAction()
+//modify actionDesc, nextRoll, Attacker, HP
+//ifDead(clear))
+//2 SEC
+//ifDead(clear)
+//performRoll (hit or init)
+//actionDesc = describe roll ("character attacks!", "Roll initaive")
+//sets next roll (attack or hit)
+//)1 SEC
 
-    
+
+
 function Battle() {
+
     // messageBodyArray
-    // variables:  actionRoll1 actionIcon1 actionRoll1 actionIcon1
+    // form stat variables:  
+    //              actionRoll1 actionIcon1 actionRoll1 actionIcon1
     //              actionDesc, nextRollType
+    //              currentHp1, currentHp2
     //
     //fight()
     //performRoll(type: nextroll) setDice, turns++, setTurn
     //executeAction(nextroll(when nextroll is an attack)
-    const [formState, setFormState] = useState({ 
-        username: "",
-        password: ""
-     });
-     const opponent = localStorage.getItem('current_opponent')
-    ? JSON.parse(localStorage.getItem('current_opponent'))
-    : false;
+    //DEFINE BATTLE STATE
+    const [battleState, setbattleState] = useState({
+        playerRoll: 0,
+        opponentRoll: 0,
+        playerRollIcon: '🌀',
+        opponentRollIcon: '🌀',
+        actionDes: 'START BATTLE',
+        combatLog: [{ action: 'PLayer has thrown down the gauntlet!', bulma: playerLogCss }, { action: 'Player two has accepted the duel!', bulma: opponentLogCss }],
+    });
+
+    // const [playerHp, setPlayerHp] = useState(0);
+    // const [opponentHp, setOpponentHp] = useState(0);
+    const opponent = localStorage.getItem('current_opponent')
+        ? JSON.parse(localStorage.getItem('current_opponent'))
+        : false;
     console.log(opponent);
     var myStats;
     var opponentStats;
     const { loading, data, error } = useQuery(QUERY_ME);
     const { loading: loading2, data: data2 } = useQuery(QUERY_OPPONENT, {
         variables: { name: opponent },
-      });
+    });
 
     if (loading || loading2) {
         return <div>Loading...</div>;
-      } else if (data && data2) {
-        console.log(data);
-        console.log(data2);
+    } else if (data && data2 && battleLoad === 0) {
+        //DEFINE COMBATANTS
+        player1 = new Combatant(data.me.name, data.me.statblock.range, data.me.statblock.hp, data.me.statblock.attack, data.me.statblock.crit, data.me.statblock.defense, data.me.statblock.parry, playerLogCss);
+        player2 = new Combatant(data2.opponent.name, data2.opponent.statblock.range, data2.opponent.statblock.hp, data2.opponent.statblock.attack, data2.opponent.statblock.crit, data2.opponent.statblock.defense, data2.opponent.statblock.parry, opponentLogCss);
+        battleLoad++;
+        playerHp = player1.hitpoints;
+        opponentHp = player2.hitpoints;
+        // setPlayerHp(playerHp + data.me.statblock.hp);
+        // setOpponentHp(opponentHp + data2.opponent.statblock.hp);
+        console.log(data.me);
+        console.log(player1);
+        console.log(data2.opponent);
+        console.log(player2);
+    } else if (data && data2) {
+        if (player1.hitpoints > 0 && player2.hitpoints > 0) {
+            playerHp = player1.hitpoints;
+            opponentHp = player2.hitpoints;
+        } else if (player1.hitpoints <= 0) {
+            playerHp = 0;
+            opponentHp = player2.hitpoints;
+        } else {
+            playerHp = player1.hitpoints;
+            opponentHp = 0;
+        }
+        console.log(battleState);
 
-      } else {
+
+    } else {
         console.log(JSON.parse(JSON.stringify(error)))
-      }
+    }
+
+    const startRound = (action) => {
+        var attackRound;      
+        if (playerTurn) {
+            attackRound = player1.attack(player2, action, hit, defense);
+            playerHp = attackRound.thisHp;
+            opponentHp = attackRound.targethp;
+        } else {
+            attackRound = player2.attack(player1, action, hit, defense);
+            playerHp = attackRound.targethp;
+            opponentHp = attackRound.thisHp;
+        }
+        console.log(attackRound);
+        battleState.combatLog.push(...attackRound.logArray);
+
+        console.log(battleState);
+        return attackRound.nextAction;
+
+    };
+
+    // const pushCombatLog = (logArray) => {
+
+
+    // } 
+
+
+    const startFight = () => {
+
+        rollInit();
+        const turnInterval = setInterval(() => {
+            if (nextAction === 'attack') {
+                console.log(nextAction);
+                nextAction = startRound(nextAction);
+                console.log(nextAction);
+                if (!player1.isAlive() || !player2.isAlive()) {
+                    clearInterval(turnInterval);
+                    console.log('Game over!');
+                }
+                
+            } else if (nextAction === 'opportunity') {
+                playerTurn = !playerTurn;
+                rollDice();
+                nextAction = startRound(nextAction);
+            } else if (nextAction === 'init') {
+                rollInit();
+                nextAction = 'roll';
+            } else if (nextAction === 'endTurn') {
+                playerTurn = !playerTurn;
+                nextAction = 'roll';
+            } else if (nextAction === 'dead') {
+                if (player1.isAlive()) {
+                    battleState.combatLog.push({ "action": `☠️ ${player2.name} IS DEAD 🪦`, "bulma": rollLogCss });
+                } else {
+                    battleState.combatLog.push({ "action": `☠️ ${player1.name} IS DEAD 🪦`, "bulma": rollLogCss });
+                }
+                clearInterval(turnInterval);
+                console.log('Game over!');
+            } else if (nextAction === 'roll') {
+                playerTurn? battleState.combatLog.push({ "action": ` ${player1.name} attacks!`, "bulma": attackLogCss }) : battleState.combatLog.push({ "action": `${player2.name} attacks!`, "bulma": attackLogCss });                
+                rollDice();
+                nextAction = 'attack';
+            } else {
+                clearInterval(turnInterval);
+                console.log('Something went wrong!');
+            }
+            setbattleState({
+                ...battleState,
+                combatLog: [...battleState.combatLog],
+    
+            });
+        }, 600);
+
+
+    };
+
+    function rollDice() {
+        hit = Math.floor(Math.random() * 20) + 1;
+        defense = (Math.floor(Math.random() * 20) + 1);
+        if (playerTurn) {
+            battleState.combatLog.push({ "action": `(${hit}) 🎲🗡️ ROLL 🛡️🎲 (${defense})`, "bulma": rollLogCss });
+            battleState.playerRollIcon = '🗡️';
+            battleState.opponentRollIcon = '🛡️';
+            battleState.playerRoll = hit;
+            battleState.opponentRoll = defense;
+        } else {
+            battleState.combatLog.push({ "action": `(${defense}) 🎲🛡️ ROLL 🗡️🎲 (${hit})`, "bulma": rollLogCss });
+            battleState.playerRollIcon = '🛡️';
+            battleState.opponentRollIcon = '🗡️';
+            battleState.playerRoll = defense;
+            battleState.opponentRoll = hit;
+        };
+
+    };
+    function rollInit() {
+
+        const playerInit = Math.floor(Math.random() * 20) + 1;
+        const opponentInit = Math.floor(Math.random() * 20) + 1;
+        // setbattleState({
+        //     ...battleState,
+        battleState.playerRoll = playerInit;
+        battleState.opponentRoll = opponentInit;
+        battleState.playerRollIcon = '🌀';
+        battleState.opponentRollIcon = '🌀';
+
+
+        // });
+
+        if (playerInit === opponentInit) {
+            rollInit()
+        } else if (opponentInit > playerInit) {
+            playerTurn = false;
+            battleState.combatLog.push({ "action": `(${opponentInit}) 🎲🌀 INITIATIVE 🌀🎲 (${playerInit})`, "bulma": rollLogCss });
+            battleState.combatLog.push({ "action": `${data2.opponent.name} moves first!`, "bulma": opponentLogCss });
+        } else {
+            playerTurn = true;
+            battleState.combatLog.push({ "action": `(${opponentInit}) 🎲🌀 INITIATIVE  🌀🎲 (${playerInit})`, "bulma": rollLogCss });
+            battleState.combatLog.push({ "action": `${data.me.name} moves first!`, "bulma": playerLogCss });
+        }
+        nextAction = 'roll';
+    }
+
+
+
+
+
     return (
-        <>          
+        <>
             <Container>
-            <div className="tile is-ancestor">
-                <div className="tile is-vertical is-12">
-                    <div className="tile">
-                        <div className="tile is-parent">
-                            <div className="has-text-left tile is-child box">
-                            <progress className="progress is-danger column" id="health" value="40" max={data.me.statblock.hp}></progress>
-                                <div className="is-inline health-display">
-                                     <Badge className='column is-pulled-left' style={{ display: 'inline-block', fontSize: '33px',  boxShadow: ' 0 0 8px #999', padding: '0.5em 0.6em', margin:'0px' }}>0</Badge>
+                <div className="tile is-ancestor">
+                    <div className="tile is-vertical is-12">
+                        <div className="tile">
+                            <div className="tile is-parent">
+                                <div className="has-text-left tile is-child box">
+                                    <progress className="progress is-danger" id="health" value={playerHp} max={data.me.statblock.hp}></progress>
+                                    <div className="is-inline health-display">
+                                        <Badge className='column is-pulled-right' style={{ display: 'inline-block', fontSize: '25px', borderRadius: '60px', boxShadow: ' 0 0 8px #999', padding: '0.5em 0.6em', margin: '0px' }}>{playerHp}/{data.me.statblock.hp}</Badge>
+                                        <p className="title">{data.me.name}</p>
+                                        <p className="subtitle">
+                                            {/* {data.me.inventory.forEach((slot) => (
+                                    <Badge className='is-pulled-left' style={{ display: 'inline-block', fontSize: '12px', borderRadius: '60px', boxShadow: ' 0 0 8px #999', padding: '0.5em 0.6em', margin:'0px' }}>{slot.icon}</Badge>
+                                ))} */}
+                                        </p>
+                                    </div>
+                                    <div>
+
+
+                                    </div>
                                 </div>
-                                <div>
-                                
-                                <p className="title">{data.me.name}</p>
-                                <p className="subtitle">Subtitle</p>
-                                </div>
+                            </div>
+                            <div className="tile is-parent">
+                                <article className="has-text-right tile is-child box">
+                                    <div className="is-inline health-display">
+                                        <progress className="progress is-danger" id="health" value={opponentHp} max={data2.opponent.statblock.hp}></progress>
+                                        <div className="is-inline health-display">
+                                            <Badge className='column is-pulled-left' style={{ display: 'inline-block', fontSize: '25px', borderRadius: '60px', boxShadow: ' 0 0 8px #999', padding: '0.5em 0.6em', margin: '0px' }}>{opponentHp}/{data2.opponent.statblock.hp}</Badge>
+                                            <p className="title">{data2.opponent.name}</p>
+                                            <p className="subtitle">
+                                                {/* {data.me.inventory.forEach((slot) => (
+                                    <Badge className='is-pulled-left' style={{ display: 'inline-block', fontSize: '12px', borderRadius: '60px', boxShadow: ' 0 0 8px #999', padding: '0.5em 0.6em', margin:'0px' }}>{slot.icon}</Badge>
+                                ))} */}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </article>
                             </div>
                         </div>
                         <div className="tile is-parent">
-                            <article className="has-text-right tile is-child box">
-                            <div className="is-inline health-display">
-                                    (60)<progress id="health" value="40" max="100"></progress>❤️
-                                </div>
-                                <p className="title">Two</p>
-                                <p className="subtitle">Subtitle</p>
-                            </article>
+                            <div id="messageBody" className="panel-Body box scroll is-size-4 is-size-6-mobile">
+                                {battleState.combatLog.map((element) => (<div className={element.bulma}>{element.action}</div>))}
+                            </div>
                         </div>
                     </div>
-                    <div className="tile is-parent">
-                        <article className=" box panel-Body scroll">
-                            <p className="title">Three</p>
-                            <p className="subtitle">Subtitle</p>
+                </div>
+                <div className="level is-ancestor">
+                    <div className="level-item is-parent is-3">
+                        <div className="has-text-left tile is-child box">
+                            <p className="title">🎲{battleState.playerRollIcon} ({battleState.playerRoll})</p>
+
+                        </div>
+                    </div>
+                    <div className="tile is-parent is-6">
+                        <article className="has-text-centered tile is-child box" onClick={() => (startFight())}>
+                            <p className="title">{battleState.actionDes}</p>
                         </article>
                     </div>
-                </div>                
-            </div>
-            <div className="tile is-ancestor">
-                <div className="tile is-parent is-3">
-                    <article className="has-text-centered tile is-child box">
-                        <p className="title">🎲🗡️ (20)</p>
-                        <p className="subtitle">Subtitle</p>
-                    </article>
+                    <div className="tile is-parent is-3">
+                        <article className="has-text-right tile is-child box">
+                            <p className="title">🎲{battleState.opponentRollIcon} ({battleState.opponentRoll})</p>
+                        </article>
+                    </div>
                 </div>
-                <div className="tile is-parent is-6">
-                    <article className="has-text-centered tile is-child box">
-                        <p className="title">Seven</p>
-                        <p className="subtitle">Subtitle</p>
-                    </article>
-                </div>
-                <div className="tile is-parent is-3">
-                    <article className="has-text-centered tile is-child box">
-                        <p className="title">🎲🛡️ (12)</p>
-                        <p className="subtitle">Subtitle</p>
-                    </article>
-                </div>
-            </div>
             </Container>
         </>
     );
