@@ -8,7 +8,7 @@ const Home = () => {
           <div className="column is-6">
             <div className="box">
               <h1 className="title has-text-centered">⚔️</h1>
-              <h1 className="title has-text-centered">Welcome to Epic Dueler</h1>
+              <h2 className="title has-text-centered">Welcome to Epic Dueler</h2>
               <div className="buttons is-centered">
                 <Link to="/login" className="button is-primary">
                   Login
