@@ -1,4 +1,4 @@
-class Character {
+class Combatant {
   constructor(name, strength, hitpoints, atk, crit, def, parry) {
     this.name = name;
     this.strength = strength;
@@ -11,8 +11,8 @@ class Character {
   //items 1 statUnit = +12hp, +1 stat, +2 range 
   // 🛡️ ⚔️ 🩸 🎲 
   // 🥋🎽🥷👩‍🚀🧑‍🚒👷🦹🏼‍♀️⛑️🪖👑👒🤖💀💥
-//🔪🦯🗡️🪓⚔️🏏🦴🪄
-//🪙🧿📿🎀❤️💠🔱🎲🎖️🥇🥈🥉🥽👓💍
+  //🔪🦯🗡️🪓⚔️🏏🦴🪄
+  //🪙🧿📿🎀❤️💠🔱🎲🎖️🥇🥈🥉🥽👓💍
   printStats() {
     console.log(`❤️ (${this.hitpoints})  -(${this.name})-`);
   }
@@ -188,58 +188,60 @@ class Character {
   }
 }
 
+module.exports = Combatant
+
 // Creates two unique characters using the "character" constructor
 // name, strength, hitpoints, atk, crit, def, parry   4, 60, 0, 0,0,0
-const grace = new Character('Grace', 10, 72, 3, 2, 3, 3); //15
-const dijkstra = new Character('Dijks', 4, 60, 0, 0, 0, 0); //16
-var graceTurn = true;
+// const grace = new Character('Grace', 10, 72, 3, 2, 3, 3); //15
+// const dijkstra = new Character('Dijks', 4, 60, 0, 0, 0, 0); //16
+// var graceTurn = true;
 
 
 
 // ROLL INITIATIVE randomly determines who goes next
 // rollInit() determines who attacks first and is triggered by a parry event
-function rollInit() {
+// function rollInit() {
 
-  const graceInit = Math.floor(Math.random() * 20) + 1;
-  const dijkstraInit = Math.floor(Math.random() * 20) + 1;
+//   const graceInit = Math.floor(Math.random() * 20) + 1;
+//   const dijkstraInit = Math.floor(Math.random() * 20) + 1;
 
-  if (graceInit === dijkstraInit) {
-    rollInit()
-  } else if (dijkstraInit > graceInit) {
-    graceTurn = false;
-    console.log(`Initiative Roll:
-🎲   (${dijkstraInit}) VS (${graceInit})
-${dijkstra.name} moves first!`);
-  } else {
-    graceTurn = true;
-    console.log(`Initiative Roll:
-🎲   (${graceInit}) VS (${dijkstraInit})
-${grace.name} moves first!`);
-  }
-}
+//   if (graceInit === dijkstraInit) {
+//     rollInit()
+//   } else if (dijkstraInit > graceInit) {
+//     graceTurn = false;
+//     console.log(`Initiative Roll:
+// 🎲   (${dijkstraInit}) VS (${graceInit})
+// ${dijkstra.name} moves first!`);
+//   } else {
+//     graceTurn = true;
+//     console.log(`Initiative Roll:
+// 🎲   (${graceInit}) VS (${dijkstraInit})
+// ${grace.name} moves first!`);
+//   }
+// }
 
-grace.printStats();
-dijkstra.printStats();
-rollInit();
+// grace.printStats();
+// dijkstra.printStats();
+// rollInit();
 
-const turnInterval = setInterval(() => {
+// const turnInterval = setInterval(() => {
 
-  // If either character is not alive, end the game
-  if (!grace.isAlive() || !dijkstra.isAlive()) {
-    clearInterval(turnInterval);
-    console.log('Game over!');
-  } else if (graceTurn) {
-    var result = grace.attack(dijkstra);
-    dijkstra.printStats();
-    grace.printStats();
-    console.log(result);
-  } else {
-    var result = dijkstra.attack(grace);
-    dijkstra.printStats();
-    grace.printStats();
-    console.log(result);
-  }
+//   // If either character is not alive, end the game
+//   if (!grace.isAlive() || !dijkstra.isAlive()) {
+//     clearInterval(turnInterval);
+//     console.log('Game over!');
+//   } else if (graceTurn) {
+//     var result = grace.attack(dijkstra);
+//     dijkstra.printStats();
+//     grace.printStats();
+//     console.log(result);
+//   } else {
+//     var result = dijkstra.attack(grace);
+//     dijkstra.printStats();
+//     grace.printStats();
+//     console.log(result);
+//   }
 
-  // Switch turns
-  graceTurn = !graceTurn;
-}, 1000);
+//   // Switch turns
+//   graceTurn = !graceTurn;
+// }, 1000);

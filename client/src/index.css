@@ -1,15 +1,25 @@
 .scroll {
-    height: 400px;
+    height: 450px;
     overflow: scroll; 
     width: 90%; 
     margin: auto;
     display: flex;
     justify-content: flex-end;
-     flex-direction: column;
+    flex-direction: column-reverse;
+    overscroll-behavior-y: contain;
+    scroll-snap-type: y mandatory;
+}
+
+.scroll > div:last-child {
+    scroll-snap-align: start;
 }
 
 .fighter {
     width: 50%;
+}
+
+.log {
+    width:100%;
 }
 
 
