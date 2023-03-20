@@ -1,0 +1,28 @@
+nav {
+  background-color: orange !important;
+}
+
+.navbar-item {
+  background-color: orange !important;
+  color: white;
+  border-radius: 50% !important;
+  font-size: "200px";
+  padding: "300px" !important;
+}
+
+.navbar-item.active {
+  background-color: orange !important;
+  color: white !important;
+  border-radius: 50% !important;
+}
+
+.navbar-item:hover {
+  background-color: white !important;
+  color: orange !important;
+  border-radius: 50% !important;
+}
+
+.navbar-start {
+  padding: "15px" !important;
+  font-size: "3rem" !important;
+}
