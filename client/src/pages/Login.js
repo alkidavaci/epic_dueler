@@ -2,11 +2,8 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useMutation, useQuery } from "@apollo/client";
 import { LOGIN } from "../utils/gql/mutations";
-import { QUERY_ME } from "../utils/gql/queries";
-import Inventory from './Inventory'
 import Auth from "../utils/Auth";
-
-// import Inventory from '../pages/Inventory';
+import { useNavigate } from "react-router-dom";
 
 
 const Login = (props) => {
@@ -22,6 +19,13 @@ const Login = (props) => {
       [name]: value,
     });
   };
+  
+  // Navigate to Inventory page 
+  let navigate = useNavigate();
+  const routeChange = () => {
+    let path = `/Inventory`;
+    navigate(path);
+  }
 
   // Submit form
   const handleFormSubmit = async (event) => {
@@ -34,7 +38,8 @@ const Login = (props) => {
       console.log({ data });
       Auth.login(data.login.token);
 
-
+      // Change route to Inventory on click
+      routeChange();
     } catch (e) {
       console.error(JSON.parse(JSON.stringify(e)));
     }
@@ -44,15 +49,11 @@ const Login = (props) => {
       username: "",
       password: "",
     });
-
-
   };
 
   return (
     <>
-      {data ? (
-        <Inventory />
-      ) : (<section className="section">
+      <section className="section">
         <div className="container">
           <div className="columns is-centered">
             <form onSubmit={handleFormSubmit}>
@@ -101,13 +102,6 @@ const Login = (props) => {
             </form>
           </div>
         </div> </section>
-      )}
-      {error && (
-        <div className="notification is-danger">
-          <p className="my-3">{error.message}</p>
-        </div>
-      )}
-
     </>
   );
 };
