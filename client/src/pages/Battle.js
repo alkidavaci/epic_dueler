@@ -5,13 +5,19 @@ import { LOGIN } from "../utils/gql/mutations";
 import { Container, Button } from 'react-bootstrap';
 import Badge from 'react-bootstrap/Badge';
 import { QUERY_ME, QUERY_OPPONENT } from "../utils/gql/queries";
-import { Combatant } from "../utils/character";
-var health = Math.floor(45 / 60);
+import Combatant from "../utils/combatant";
 var battleLoad = 0;
 var playerTurn = true;
 const playerLogCss = 'is-pulled-right log';
 const opponentLogCss = 'has-text-right log';
 const rollLogCss = 'tag is-info log is-large is-light';
+var player1;
+var player2;
+var playerHp;
+var opponentHp;
+var nextAction;
+var hit;
+var defense;
 
 
 //interval turn(
@@ -40,17 +46,18 @@ function Battle() {
     //fight()
     //performRoll(type: nextroll) setDice, turns++, setTurn
     //executeAction(nextroll(when nextroll is an attack)
+    //DEFINE BATTLE STATE
     const [battleState, setbattleState] = useState({
         playerRoll: 0,
         opponentRoll: 0,
         playerRollIcon: '🌀',
         opponentRollIcon: '🌀',
         actionDes: 'START BATTLE',
-        playerHp: 60, //data.me.statblock.hp,
-        opponentHp: 60, //data2.opponent.statblock.hp
-        nextRoll: 'rollInit', //
-        combatLog: [{action: 'PLayer one Attacks!', bulma: playerLogCss}, {action: 'Player two takes 800 damage', bulma: opponentLogCss}, {action: 'test', bulma: rollLogCss}],
+        combatLog: [{ action: 'PLayer has thrown down the gauntlet!', bulma: playerLogCss }, { action: 'Player two has accepted the duel!', bulma: opponentLogCss }],
     });
+
+    // const [playerHp, setPlayerHp] = useState(0);
+    // const [opponentHp, setOpponentHp] = useState(0);
     const opponent = localStorage.getItem('current_opponent')
         ? JSON.parse(localStorage.getItem('current_opponent'))
         : false;
@@ -65,11 +72,29 @@ function Battle() {
     if (loading || loading2) {
         return <div>Loading...</div>;
     } else if (data && data2 && battleLoad === 0) {
-        console.log(battleLoad);
+        //DEFINE COMBATANTS
+        player1 = new Combatant(data.me.name, data.me.statblock.range, data.me.statblock.hp, data.me.statblock.attack, data.me.statblock.crit, data.me.statblock.defense, data.me.statblock.parry, playerLogCss);
+        player2 = new Combatant(data2.opponent.name, data2.opponent.statblock.range, data2.opponent.statblock.hp, data2.opponent.statblock.attack, data2.opponent.statblock.crit, data2.opponent.statblock.defense, data2.opponent.statblock.parry, opponentLogCss);
         battleLoad++;
+        playerHp = player1.hitpoints;
+        opponentHp = player2.hitpoints;
+        // setPlayerHp(playerHp + data.me.statblock.hp);
+        // setOpponentHp(opponentHp + data2.opponent.statblock.hp);
+        console.log(data.me);
+        console.log(player1);
+        console.log(data2.opponent);
+        console.log(player2);
     } else if (data && data2) {
-        battleState.playerHp = data.me.statblock.hp;
-        battleState.opponentHp = data2.opponent.statblock.hp;
+        if (player1.hitpoints > 0 && player2.hitpoints > 0) {
+            playerHp = player1.hitpoints;
+            opponentHp = player2.hitpoints;
+        } else if (player1.hitpoints <= 0) {
+            playerHp = 0;
+            opponentHp = player2.hitpoints;
+        } else {
+            playerHp = player1.hitpoints;
+            opponentHp = 0;
+        }
         console.log(battleState);
 
 
@@ -77,62 +102,116 @@ function Battle() {
         console.log(JSON.parse(JSON.stringify(error)))
     }
 
-    
+    const startRound = (action) => {
+        var attackRound;      
+        if (playerTurn) {
+            attackRound = player1.attack(player2, action, hit, defense);
+            playerHp = attackRound.thisHp;
+            opponentHp = attackRound.targethp;
+        } else {
+            attackRound = player2.attack(player1, action, hit, defense);
+            playerHp = attackRound.targethp;
+            opponentHp = attackRound.thisHp;
+        }
+        console.log(attackRound);
+        battleState.combatLog.push(...attackRound.logArray);
 
-    const startFight = () => {
-        // const turnInterval = setInterval(() => {
+        console.log(battleState);
+        return attackRound.nextAction;
 
-        //     // If either character is not alive, end the game
-        //     if (!grace.isAlive() || !dijkstra.isAlive()) {
-        //       clearInterval(turnInterval);
-        //       console.log('Game over!');
-        //     } else if (graceTurn) {
-        //       var result = grace.attack(dijkstra);
-        //       dijkstra.printStats();
-        //       grace.printStats();
-        //       console.log(result);
-        //     } else {
-        //       var result = dijkstra.attack(grace);
-        //       dijkstra.printStats();
-        //       grace.printStats();
-        //       console.log(result);
-        //     }
-          
-        //     // Switch turns
-        //     graceTurn = !graceTurn;
-        //   }, 1000);
-
-        
-        rollInit();
-
-        console.log(battleState.nextRoll, playerTurn);
     };
 
+    // const pushCombatLog = (logArray) => {
+
+
+    // } 
+
+
+    const startFight = () => {
+
+        rollInit();
+        const turnInterval = setInterval(() => {
+            if (nextAction === 'attack' || nextAction === 'opportunity') {
+                console.log(nextAction);
+                nextAction = startRound(nextAction);
+                console.log(nextAction);
+                if (!player1.isAlive() || !player2.isAlive()) {
+                    clearInterval(turnInterval);
+                    console.log('Game over!');
+                }
+            } else if (nextAction === 'init') {
+                rollInit();
+                nextAction = 'roll';
+            } else if (nextAction === 'endTurn') {
+                playerTurn = !playerTurn;
+                rollDice();
+                nextAction = 'roll';
+            } else if (nextAction === 'dead') {
+                clearInterval(turnInterval);
+                console.log('Game over!');
+            } else if (nextAction === 'roll') {
+                nextAction = 'attack';
+            } else {
+                clearInterval(turnInterval);
+                console.log('Something went wrong!');
+            }
+            setbattleState({
+                ...battleState,
+                combatLog: [...battleState.combatLog],
+    
+            });
+        }, 500);
+
+
+    };
+
+    function rollDice() {
+        hit = Math.floor(Math.random() * 20) + 1;
+        defense = (Math.floor(Math.random() * 20) + 1);
+        if (playerTurn) {
+            battleState.combatLog.push({ "action": `(${hit}) 🎲🗡️ ROLL 🛡️🎲 (${defense})`, "bulma": rollLogCss });
+            battleState.playerRollIcon = '🗡️';
+            battleState.opponentRollIcon = '🛡️';
+            battleState.playerRoll = hit;
+            battleState.opponentRoll = defense;
+        } else {
+            battleState.combatLog.push({ "action": `(${defense}) 🎲🛡️ ROLL 🗡️🎲 (${hit})`, "bulma": rollLogCss });
+            battleState.playerRollIcon = '🛡️';
+            battleState.opponentRollIcon = '🗡️';
+            battleState.playerRoll = defense;
+            battleState.opponentRoll = hit;
+        };
+
+    };
     function rollInit() {
 
         const playerInit = Math.floor(Math.random() * 20) + 1;
         const opponentInit = Math.floor(Math.random() * 20) + 1;
-        setbattleState({
-            ...battleState,
-            playerRoll: playerInit,
-            opponentRoll: opponentInit,
-          });
+        // setbattleState({
+        //     ...battleState,
+        battleState.playerRoll = playerInit;
+        battleState.opponentRoll = opponentInit;
+        battleState.playerRollIcon = '🌀';
+        battleState.opponentRollIcon = '🌀';
+
+
+        // });
 
         if (playerInit === opponentInit) {
             rollInit()
         } else if (opponentInit > playerInit) {
             playerTurn = false;
-            battleState.combatLog.push({ "action": `(${opponentInit}) 🎲  INITIATIVE ROLL  🎲 (${playerInit})`, "bulma": rollLogCss });
+            battleState.combatLog.push({ "action": `(${opponentInit}) 🎲🌀 INITIATIVE 🌀🎲 (${playerInit})`, "bulma": rollLogCss });
             battleState.combatLog.push({ "action": `${data2.opponent.name} moves first!`, "bulma": opponentLogCss });
         } else {
             playerTurn = true;
-            battleState.combatLog.push({ "action": `(${opponentInit}) 🎲  INITIATIVE ROLL  🎲 (${playerInit})`, "bulma": rollLogCss });
+            battleState.combatLog.push({ "action": `(${opponentInit}) 🎲🌀 INITIATIVE  🌀🎲 (${playerInit})`, "bulma": rollLogCss });
             battleState.combatLog.push({ "action": `${data.me.name} moves first!`, "bulma": playerLogCss });
         }
-        battleState.nextRoll = 'attack';
+        nextAction = 'attack';
     }
 
-    
+
 
 
 
@@ -144,9 +223,9 @@ function Battle() {
                         <div className="tile">
                             <div className="tile is-parent">
                                 <div className="has-text-left tile is-child box">
-                                    <progress className="progress is-danger" id="health" value={battleState.playerHp} max={data.me.statblock.hp}></progress>
+                                    <progress className="progress is-danger" id="health" value={playerHp} max={data.me.statblock.hp}></progress>
                                     <div className="is-inline health-display">
-                                        <Badge className='column is-pulled-right' style={{ display: 'inline-block', fontSize: '25px', borderRadius: '60px', boxShadow: ' 0 0 8px #999', padding: '0.5em 0.6em', margin: '0px' }}>{battleState.playerHp}/{data.me.statblock.hp}</Badge>
+                                        <Badge className='column is-pulled-right' style={{ display: 'inline-block', fontSize: '25px', borderRadius: '60px', boxShadow: ' 0 0 8px #999', padding: '0.5em 0.6em', margin: '0px' }}>{playerHp}/{data.me.statblock.hp}</Badge>
                                         <p className="title">{data.me.name}</p>
                                         <p className="subtitle">
                                             {/* {data.me.inventory.forEach((slot) => (
@@ -163,17 +242,17 @@ function Battle() {
                             <div className="tile is-parent">
                                 <article className="has-text-right tile is-child box">
                                     <div className="is-inline health-display">
-                                    <progress className="progress is-danger" id="health" value={battleState.opponentHp} max={data2.opponent.statblock.hp}></progress>
-                                    <div className="is-inline health-display">
-                                        <Badge className='column is-pulled-left' style={{ display: 'inline-block', fontSize: '25px', borderRadius: '60px', boxShadow: ' 0 0 8px #999', padding: '0.5em 0.6em', margin: '0px' }}>{battleState.opponentHp}/{data2.opponent.statblock.hp}</Badge>
-                                        <p className="title">{data2.opponent.name}</p>
-                                        <p className="subtitle">
-                                            {/* {data.me.inventory.forEach((slot) => (
+                                        <progress className="progress is-danger" id="health" value={opponentHp} max={data2.opponent.statblock.hp}></progress>
+                                        <div className="is-inline health-display">
+                                            <Badge className='column is-pulled-left' style={{ display: 'inline-block', fontSize: '25px', borderRadius: '60px', boxShadow: ' 0 0 8px #999', padding: '0.5em 0.6em', margin: '0px' }}>{opponentHp}/{data2.opponent.statblock.hp}</Badge>
+                                            <p className="title">{data2.opponent.name}</p>
+                                            <p className="subtitle">
+                                                {/* {data.me.inventory.forEach((slot) => (
                                     <Badge className='is-pulled-left' style={{ display: 'inline-block', fontSize: '12px', borderRadius: '60px', boxShadow: ' 0 0 8px #999', padding: '0.5em 0.6em', margin:'0px' }}>{slot.icon}</Badge>
                                 ))} */}
-                                        </p>
+                                            </p>
+                                        </div>
                                     </div>
-                                    </div>                                    
                                 </article>
                             </div>
                         </div>
