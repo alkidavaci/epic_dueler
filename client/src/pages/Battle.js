@@ -6,8 +6,9 @@ import { Container, Button } from 'react-bootstrap';
 import Badge from 'react-bootstrap/Badge';
 import { QUERY_ME, QUERY_OPPONENT } from "../utils/gql/queries";
 var health = Math.floor(45/60);
-var messageBody = document.querySelector('.scroll');
-// messageBody.scrollTop = messageBody.scrollHeight - messageBody.clientHeight;
+var battleLoad = 0;
+var playerTurn = true;
+
 
 //interval turn(
     // inverval modifierRoll(
@@ -18,20 +19,32 @@ var messageBody = document.querySelector('.scroll');
         //2 SEC
     //ifDead(clear)
     //performRoll (hit or init)
-        //actionDesc = describe roll (x attacks, Roll initaive)
+        //actionDesc = describe roll ("character attacks!", "Roll initaive")
+        //sets next roll (attack or hit)
+//)1 SEC
+
 
     
 function Battle() {
+    
     // messageBodyArray
-    // variables:  actionRoll1 actionIcon1 actionRoll1 actionIcon1
+    // form stat variables:  
+    //              actionRoll1 actionIcon1 actionRoll1 actionIcon1
     //              actionDesc, nextRollType
+    //              currentHp1, currentHp2
     //
     //fight()
     //performRoll(type: nextroll) setDice, turns++, setTurn
     //executeAction(nextroll(when nextroll is an attack)
-    const [formState, setFormState] = useState({ 
-        username: "",
-        password: ""
+    const [battleState, setbattleState] = useState({ 
+        playerRoll: 0,
+        opponentRoll: 0,
+        playerRollIcon: '🌀',
+        opponentRollIcon: '🌀',
+        actionDes: 'START BATTLE',
+        playerHp: 60, //data.me.statblock.hp,
+        opponentHp: 60, //data2.opponent.statblock.hp
+        messageArr: [],
      });
      const opponent = localStorage.getItem('current_opponent')
     ? JSON.parse(localStorage.getItem('current_opponent'))
@@ -47,12 +60,44 @@ function Battle() {
     if (loading || loading2) {
         return <div>Loading...</div>;
       } else if (data && data2) {
-        console.log(data);
-        console.log(data2);
+        battleState.playerHp = data.me.statblock.hp;
+        battleState.opponentHp = data2.opponent.statblock.hp;
+        console.log(battleState);
+        
 
-      } else {
+      }else {
         console.log(JSON.parse(JSON.stringify(error)))
       }
+
+      const startFight = () => {
+        var chatHistory = document.getElementById("messageBody");
+        chatHistory.scrollTop = chatHistory.scrollHeight;
+        console.log("eh");
+        rollInit();
+      };
+
+      function rollInit() {
+
+        const playerInit = Math.floor(Math.random() * 20) + 1;
+        const opponentInit = Math.floor(Math.random() * 20) + 1;
+      
+        if (playerInit === opponentInit) {
+          rollInit()
+        } else if (opponentInit > playerInit) {
+          playerTurn = false;
+          console.log(`Initiative Roll:
+      🎲   (${opponentInit}) VS (${playerInit})
+      ${data2.opponent.name} moves first!`);
+        } else {
+          playerTurn = true;
+          console.log(`Initiative Roll:
+      🎲   (${playerInit}) VS (${opponentInit})
+      ${data.me.name} moves first!`);
+        }
+      }
+    
+      
+      
     return (
         <>          
             <Container>
@@ -61,14 +106,19 @@ function Battle() {
                     <div className="tile">
                         <div className="tile is-parent">
                             <div className="has-text-left tile is-child box">
-                            <progress className="progress is-danger column" id="health" value="40" max={data.me.statblock.hp}></progress>
+                            <progress className="progress is-danger" id="health" value={battleState.playerHp} max={data.me.statblock.hp}></progress>
                                 <div className="is-inline health-display">
-                                     <Badge className='column is-pulled-left' style={{ display: 'inline-block', fontSize: '33px',  boxShadow: ' 0 0 8px #999', padding: '0.5em 0.6em', margin:'0px' }}>0</Badge>
+                                     <Badge className='column is-pulled-right' style={{ display: 'inline-block', fontSize: '25px', borderRadius: '60px',  boxShadow: ' 0 0 8px #999', padding: '0.5em 0.6em', margin:'0px' }}>{battleState.playerHp}/{data.me.statblock.hp}</Badge>
+                                     <p className="title">{data.me.name}</p>
+                                <p className="subtitle">
+                                    {/* {data.me.inventory.forEach((slot) => (
+                                    <Badge className='is-pulled-left' style={{ display: 'inline-block', fontSize: '12px', borderRadius: '60px', boxShadow: ' 0 0 8px #999', padding: '0.5em 0.6em', margin:'0px' }}>{slot.icon}</Badge>
+                                ))} */}
+                                </p>
                                 </div>
                                 <div>
                                 
-                                <p className="title">{data.me.name}</p>
-                                <p className="subtitle">Subtitle</p>
+                                
                                 </div>
                             </div>
                         </div>
@@ -83,7 +133,7 @@ function Battle() {
                         </div>
                     </div>
                     <div className="tile is-parent">
-                        <article className=" box panel-Body scroll">
+                        <article id="messageBody" className=" box panel-Body scroll">
                             <p className="title">Three</p>
                             <p className="subtitle">Subtitle</p>
                         </article>
@@ -92,21 +142,19 @@ function Battle() {
             </div>
             <div className="tile is-ancestor">
                 <div className="tile is-parent is-3">
-                    <article className="has-text-centered tile is-child box">
-                        <p className="title">🎲🗡️ (20)</p>
-                        <p className="subtitle">Subtitle</p>
-                    </article>
+                    <div className="has-text-centered tile is-child box">
+                        <p className="title">🎲{battleState.playerRollIcon} ({battleState.playerRoll})</p>
+
+                    </div>
                 </div>
                 <div className="tile is-parent is-6">
-                    <article className="has-text-centered tile is-child box">
-                        <p className="title">Seven</p>
-                        <p className="subtitle">Subtitle</p>
+                    <article className="has-text-centered tile is-child box" onClick={() => (startFight())}>
+                        <p className="title">{battleState.actionDes}</p>
                     </article>
                 </div>
                 <div className="tile is-parent is-3">
                     <article className="has-text-centered tile is-child box">
-                        <p className="title">🎲🛡️ (12)</p>
-                        <p className="subtitle">Subtitle</p>
+                        <p className="title">🎲{battleState.opponentRollIcon} ({battleState.opponentRoll})</p>
                     </article>
                 </div>
             </div>
