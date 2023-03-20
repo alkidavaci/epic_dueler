@@ -1,14 +1,39 @@
-nav.navbar{
-    background-color: burlywood;
-    padding: 2rem;
+.header {
+  background-color: orange;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 25px;
 }
-h1.title {
-font-size: 3rem;
-color:black;
 
+.username {
+  font-size: 1rem;
+  color: black;
+  margin: .5rem;
 }
-h1.title-home{
-    font-size: 3rem;
-color:black;
-text-align: center;
+
+.logout-button button {
+   margin: .5rem;
+        
+}
+
+h1.title {
+  font-size: 4rem;
+  color: black;
+}
+
+.cont1 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.cont2 {
+  display: flex;
+  font-size: 2rem !important;
+}
+.cont3 {
+  display: inline-flex;
+align-items: center;
 }

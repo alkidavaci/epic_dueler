@@ -76,10 +76,10 @@ function App() {
                   path="/battle" 
                   element={<Battle />} 
                 />
-                    {/* <Route 
+                    <Route 
                   path="*" 
                   element={<NotFound />} 
-                /> */}
+                />
               </Routes>
             </div>
             <Footer />
