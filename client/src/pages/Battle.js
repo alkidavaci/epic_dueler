@@ -11,6 +11,8 @@ var playerTurn = true;
 const playerLogCss = 'is-pulled-right log';
 const opponentLogCss = 'has-text-right log';
 const rollLogCss = 'tag is-info log is-large is-light';
+const attackLogCss = 'tag is-warning log is-large is-light';
+const moveLogCss = 'tag is-success log is-large is-light';
 var player1;
 var player2;
 var playerHp;
@@ -131,7 +133,7 @@ function Battle() {
 
         rollInit();
         const turnInterval = setInterval(() => {
-            if (nextAction === 'attack' || nextAction === 'opportunity') {
+            if (nextAction === 'attack') {
                 console.log(nextAction);
                 nextAction = startRound(nextAction);
                 console.log(nextAction);
@@ -139,17 +141,28 @@ function Battle() {
                     clearInterval(turnInterval);
                     console.log('Game over!');
                 }
+                
+            } else if (nextAction === 'opportunity') {
+                playerTurn = !playerTurn;
+                rollDice();
+                nextAction = startRound(nextAction);
             } else if (nextAction === 'init') {
                 rollInit();
                 nextAction = 'roll';
             } else if (nextAction === 'endTurn') {
                 playerTurn = !playerTurn;
-                rollDice();
                 nextAction = 'roll';
             } else if (nextAction === 'dead') {
+                if (player1.isAlive()) {
+                    battleState.combatLog.push({ "action": `☠️ ${player2.name} IS DEAD 🪦`, "bulma": rollLogCss });
+                } else {
+                    battleState.combatLog.push({ "action": `☠️ ${player1.name} IS DEAD 🪦`, "bulma": rollLogCss });
+                }
                 clearInterval(turnInterval);
                 console.log('Game over!');
             } else if (nextAction === 'roll') {
+                playerTurn? battleState.combatLog.push({ "action": ` ${player1.name} attacks!`, "bulma": attackLogCss }) : battleState.combatLog.push({ "action": `${player2.name} attacks!`, "bulma": attackLogCss });                
+                rollDice();
                 nextAction = 'attack';
             } else {
                 clearInterval(turnInterval);
@@ -160,7 +173,7 @@ function Battle() {
                 combatLog: [...battleState.combatLog],
     
             });
-        }, 500);
+        }, 600);
 
 
     };
@@ -208,7 +221,7 @@ function Battle() {
             battleState.combatLog.push({ "action": `(${opponentInit}) 🎲🌀 INITIATIVE  🌀🎲 (${playerInit})`, "bulma": rollLogCss });
             battleState.combatLog.push({ "action": `${data.me.name} moves first!`, "bulma": playerLogCss });
         }
-        nextAction = 'attack';
+        nextAction = 'roll';
     }
 
 
