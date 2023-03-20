@@ -5,6 +5,7 @@ import decode from 'jwt-decode';
 class AuthService {
   // Get user data
   getProfile() {
+    window.location.assign('#/inventory');
     return decode(this.getToken());
   }
 
