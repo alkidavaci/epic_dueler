@@ -73,21 +73,3 @@ function Shop() {
     
     
     export default Shop;
-    
-    
-    // Having trouble accessing the amount of gold the character has 
-    
-    // import { useState } from 'react';
-    // const [inventory, setInventory] = useState([]);
-    
-    // const addToInventory = (item) => {
-        //     setInventory([...inventory, item]);
-        // const charGold = require('../../../server/models/Character')
-// onClick={() => {
-//     if (item.price > charGold.gold) {
-//         alert('You cannot afford that item!')
-//     } else {
-//         addToInventory(item);
-//         alert('Item added successfully to you inventory')
-//     }
-// }}
