@@ -194,7 +194,6 @@ function Battle() {
             if (player1.name === winner.name) {
                 gain = (player2.rating * 10) + 25;
             }
-            var gain = 0;
             const { data: charWin } = await charUpdate({
                 variables: { name: winner.name, win: true, gain: gain },
             });
@@ -276,13 +275,13 @@ function Battle() {
             <Container>
                 <div className="tile is-ancestor">
                     <div className="tile is-vertical is-12">
-                        <div className="tile">
+                        <div className="columns is-mobile">
                             <div className="tile is-parent">
                                 <div className="has-text-left tile is-child box">
                                     <progress className="progress is-danger" id="health" value={playerHp} max={data.me.statblock.hp}></progress>
                                     <div className="is-inline health-display">
-                                        <Badge className='column is-pulled-right' style={{ display: 'inline-block', fontSize: '25px', borderRadius: '60px', boxShadow: ' 0 0 8px #999', padding: '0.5em 0.6em', margin: '0px' }}>{playerHp}/{data.me.statblock.hp}</Badge>
-                                        <p className="title">{data.me.name}</p>
+                                        <Badge className='is-size-6-mobile column is-pulled-right' style={{ display: 'inline-block', fontSize: '25px', borderRadius: '60px', boxShadow: ' 0 0 8px #999', padding: '0.5em 0.6em', margin: '0px' }}>{playerHp}/{data.me.statblock.hp}</Badge>
+                                        <p className="title is-size-4-mobile">{data.me.name}</p>
                                         <p className="subtitle">
                                             {/* {data.me.inventory.forEach((slot) => (
                                     <Badge className='is-pulled-left' style={{ display: 'inline-block', fontSize: '12px', borderRadius: '60px', boxShadow: ' 0 0 8px #999', padding: '0.5em 0.6em', margin:'0px' }}>{slot.icon}</Badge>
@@ -300,8 +299,8 @@ function Battle() {
                                     <div className="is-inline health-display">
                                         <progress className="progress is-danger" id="health" value={opponentHp} max={data2.opponent.statblock.hp}></progress>
                                         <div className="is-inline health-display">
-                                            <Badge className='column is-pulled-left' style={{ display: 'inline-block', fontSize: '25px', borderRadius: '60px', boxShadow: ' 0 0 8px #999', padding: '0.5em 0.6em', margin: '0px' }}>{opponentHp}/{data2.opponent.statblock.hp}</Badge>
-                                            <p className="title">{data2.opponent.name}</p>
+                                            <Badge className='column is-pulled-left is-size-6-mobile' style={{ display: 'inline-block', fontSize: '25px', borderRadius: '60px', boxShadow: ' 0 0 8px #999', padding: '0.5em 0.6em', margin: '0px' }}>{opponentHp}/{data2.opponent.statblock.hp}</Badge>
+                                            <p className="title is-size-4-mobile">{data2.opponent.name}</p>
                                             <p className="subtitle">
                                                 {/* {data.me.inventory.forEach((slot) => (
                                     <Badge className='is-pulled-left' style={{ display: 'inline-block', fontSize: '12px', borderRadius: '60px', boxShadow: ' 0 0 8px #999', padding: '0.5em 0.6em', margin:'0px' }}>{slot.icon}</Badge>
@@ -314,7 +313,7 @@ function Battle() {
                         </div>
                         <div className="tile is-parent">
                             <div id="messageBody" className="panel-Body box scroll is-size-4 is-size-6-mobile">
-                                <div className="button is warning has-text-centered tile is-child box" onClick={() => (startFight())}>
+                                <div className="button is-warning has-text-centered tile is-child box" onClick={() => (startFight())}>
                                     <p className="title">{battleState.actionDes}</p>
                                 </div>
                                 {battleState.combatLog.map((element) => (<div className={element.bulma}>{element.action}</div>))}
@@ -322,15 +321,15 @@ function Battle() {
                         </div>
                     </div>
                 </div>
-                <div className="level is-ancestor">
-                    <div className="level-item is-parent is-6">
-                        <div className="has-text-left tile is-child box">
+                <div className="columns is-mobile">
+                    <div className="column">
+                        <div className="has-text-left  box">
                             <p className="title">🎲{battleState.playerRollIcon} ({battleState.playerRoll})</p>
 
                         </div>
                     </div>
-                    <div className="tile is-parent is-6">
-                        <article className="has-text-right tile is-child box">
+                    <div className="column">
+                        <article className="has-text-right  box">
                             <p className="title">🎲{battleState.opponentRollIcon} ({battleState.opponentRoll})</p>
                         </article>
                     </div>
