@@ -21,9 +21,7 @@ const Inventory = () => {
   };
 
   // Handle item selection
-  const [selectedItem, setSelectedItem] = useState({
 
-  });
   const handleItemClick = async (item, slot) => {
     const token = Auth.loggedIn() ? Auth.getToken() : null;
     if (!token) {

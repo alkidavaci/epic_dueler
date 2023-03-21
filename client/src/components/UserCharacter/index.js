@@ -1,5 +1,5 @@
 const UserCharacter = ({ data }) => {
-
+  console.log(data);
   return (
     <div className="container">
       <div className="container box has-text-weight-bold is-size-6 has-text-centered" style={{ border: '4px solid rgba(1, 1, 1, 1)', borderRadius: '40px',  padding: '35px' }}>

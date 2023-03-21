@@ -244,24 +244,24 @@ const resolvers = {
             if (win) {
                 char = await Character.findOneAndUpdate(
                     { name: name },
-                    { $inc: { [`wins`]: 1 }, $inc: { [`gold`]: gain } },
+                    { $inc: { wins: 1, gold: gain } },
                     { new: true }
                 ).populate("inventory")
                     .populate("statblock")
                     .populate([{ path: 'inventory', populate: [{ path: 'weapon' }, { path: 'armor' }, { path: 'slot1' }, { path: 'slot2' }, { path: 'slot3' }, { path: 'slot4' }, { path: 'bag' }] }]).exec();
 
             } else {
-                const resTax = -(Math.floor(gain / 2));
+                const resTax = -(Math.floor(gain / 4));
                 char = await Character.findOneAndUpdate(
                     { name: name },
-                    { $inc: { [`deaths`]: 1 }, $inc: { [`gold`]: resTax } },
+                    { $inc: { deaths: 1 , gold: resTax}},
                     { new: true }
                 ).populate("inventory")
                     .populate("statblock")
                     .populate([{ path: 'inventory', populate: [{ path: 'weapon' }, { path: 'armor' }, { path: 'slot1' }, { path: 'slot2' }, { path: 'slot3' }, { path: 'slot4' }, { path: 'bag' }] }]).exec();
             };
 
-            return { char };
+            return char;
 
         },
 
