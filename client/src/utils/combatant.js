@@ -258,7 +258,7 @@ class Combatant {
   }
 }
 
-module.exports = Combatant
+export default Combatant
 
 // Creates two unique characters using the "character" constructor
 // name, strength, hitpoints, atk, crit, def, parry   4, 60, 0, 0,0,0
