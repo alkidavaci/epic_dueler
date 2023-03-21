@@ -1,10 +1,13 @@
 import React, { useState } from "react";
+// import { Link } from 'react-router-dom';
+import '../components/Nav/style.css';
 import { ADD_ACCOUNT, ADD_CHARACTER } from "../utils/gql/mutations";
 import { useMutation } from "@apollo/client";
 import Inventory from "../pages/Inventory";
 import Auth from "../utils/Auth";
 import { useNavigate } from "react-router-dom";
 
+var SignUpHeader = "Sign Up";
 const Signup = () => {
   const [addCharacter, { error: charError, data: charData }] =
     useMutation(ADD_CHARACTER);
@@ -35,6 +38,10 @@ const Signup = () => {
     }
   };
 
+  const reloadPage = () => {
+    window.location.reload();
+  }
+
   const handleChange = (event) => {
     const { name, value } = event.target;
 
@@ -60,10 +67,10 @@ const Signup = () => {
 
       // Generate character
       generateChar(name);
-
+      SignUpHeader = "Welcome!"
       // Change route to Inventory on click
-      routeChange();
-      window.location.reload();
+      // routeChange();
+      // window.location.reload();
 
     } catch (e) {
       console.error(JSON.parse(JSON.stringify(e)));
@@ -81,9 +88,17 @@ const Signup = () => {
       <div className="container">
         <div className="columns is-centered">
           <div className="card-body">
+            
             <h4 className="label columns is-centered is-size-1 is-size-6-mobile">
-              Sign Up
+              {SignUpHeader}
             </h4>
+            {Auth.loggedIn()? (
+               <div className="is-centered">
+               <div onClick={reloadPage} className="navbar-item is-size-3 has-background-#ffbc6b">
+                 View Character
+               </div>              
+             </div>
+               ) : ( 
               <form onSubmit={handleFormSubmit}>
                 <div className="column is-12">
                   <div className="field">
@@ -132,9 +147,11 @@ const Signup = () => {
                   </div>
                 </div>
               </form>
-            {charError && (
+            )}{charError && (
               <div className="notification is-danger">{charError.message}</div>
             )}
+            
+            
           </div>
         </div>
       </div>
