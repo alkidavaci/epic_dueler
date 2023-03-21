@@ -56,9 +56,11 @@ const Inventory = () => {
 
   const callKey = (key) => {
     if (key === "weapon") {
+      trinketArray.push(inventory.slot1.name);
       return (`${inventory.weapon.icon} ${inventory.weapon.name}`)
     }
     else if (key === "armor") {
+      trinketArray.push(inventory.slot1.name);
       return (`${inventory.armor.icon} ${inventory.armor.name}`)
     }
     else if (key === "slot1") {
