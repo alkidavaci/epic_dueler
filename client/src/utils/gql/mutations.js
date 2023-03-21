@@ -125,13 +125,11 @@ mutation updateInventory($itemId: ID!, $action: String!, $slot: String) {
 export const UPDATE_CHARACTER = gql`
 mutation updateCharacter($name: String!, $win: Boolean!, $gain: Int!) {
     updateCharacter(name: $name, win: $win, gain: $gain) {
-      character {
         _id
         name
         gold
         wins
         deaths
-      }
     }
   }
 `;

@@ -2,7 +2,7 @@ const playerCritLogCss = 'is-pulled-right tag is-danger log is-large is-light';
 const opponentCritLogCss = 'has-text-right tag is-danger log is-large is-light';
 const critLogCss = 'tag column is-danger log is-large is-light';
 class Combatant {
-  constructor(name, strength, hitpoints, atk, crit, def, parry, logCss) {
+  constructor(name, strength, hitpoints, atk, crit, def, parry, logCss, rating) {
     this.name = name;
     this.strength = strength;
     this.hitpoints = hitpoints;
@@ -11,6 +11,7 @@ class Combatant {
     this.def = def;
     this.parry = parry;
     this.logCss = logCss;
+    this.rating = rating;
   }
   //items 1 statUnit = +12hp, +1 stat, +2 range 
   // 🛡️ ⚔️ 🩸 🎲 
@@ -183,7 +184,7 @@ class Combatant {
         // OPPORTUNITY ATTACK is a bonus attack that does not alter turn order
         logArray.push({ "action": `🎯 CRITICAL MISS! 💨`, "bulma": `${this.logCss} ${critLogCss}` });
         logArray.push({ "action": `${this.name} STUMBLES!`, "bulma": this.logCss });
-        logArray.push({ "action": `${target.name} OPPORTUNITY ATTACK!`, "bulma": target.logCss });
+        logArray.push({ "action": `${target.name} ☄️ OPPORTUNITY ATTACK!`, "bulma": target.logCss });
         if (action === 'opportunity') {
           nextAction = 'endTurn';
         } else {
@@ -208,7 +209,7 @@ class Combatant {
           //CRITICAL BLOCK results in an OPPORTUNITY ATTACK
           //OPPORTUNITY ATTACK is a bonus attack that does not alter turn order
           logArray.push({ "action": `${this.name} STUMBLES!`, "bulma": this.logCss });
-          logArray.push({ "action": `${target.name} OPPORTUNITY ATTACK!`, "bulma": target.logCss });
+          logArray.push({ "action": `${target.name} ☄️ OPPORTUNITY ATTACK!`, "bulma": target.logCss });
           if (action === 'opportunity') {
             nextAction = 'endTurn';
           } else {
